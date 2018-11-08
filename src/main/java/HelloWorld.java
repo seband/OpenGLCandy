@@ -10,6 +10,10 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
+
+/**
+ * BASED ON EXAMPLE FILE BY LWJGL3
+ */
 public class HelloWorld {
 
     // The window handle
