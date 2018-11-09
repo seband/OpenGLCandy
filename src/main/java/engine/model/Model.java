@@ -3,12 +3,14 @@ package engine.model;
 import engine.Camera;
 import engine.Program;
 import engine.Transform;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.system.MemoryStack;
 import utils.OBJLoader;
 
 import java.nio.ByteBuffer;
@@ -39,14 +41,19 @@ public class Model {
             e.printStackTrace();
         }
     }
+    private FloatBuffer matrix44Buffer = BufferUtils.createFloatBuffer(16);;
 
     public void draw(Camera camera, Transform transform) {
+
         GL20.glUseProgram(program);
         GL30.glBindVertexArray(VAO);
 
         GL20.glEnableVertexAttribArray(0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO);
+
+        setUniform("", transform.rot);
+
 
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, faces.size()*3, GL11.GL_UNSIGNED_BYTE, 0);
@@ -57,6 +64,15 @@ public class Model {
         GL30.glBindVertexArray(0);
 
         GL20.glUseProgram(0);
+    }
+    public void setUniform(String uniformName, Matrix4f value) {
+        // Dump the matrix into a float buffer
+        int rotationLocation = GL20.glGetUniformLocation(program, "rotation");
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(16);
+            value.get(fb);
+            GL20.glUniformMatrix4fv(rotationLocation, false, fb);
+        }
     }
 
     public FloatBuffer getVerticesBuffer(){
