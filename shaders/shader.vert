@@ -3,6 +3,8 @@
 in vec4 in_Position;
 in vec3 in_Normal;
 uniform mat4 rotation;
+uniform mat4 translation;
+uniform mat4 projection;
 out vec3 out_exColor;
 void main(void) {
     const vec3 light = vec3(0.78, 0.78, 0.78);
@@ -12,5 +14,5 @@ void main(void) {
 	float ldiff = kd*ll*dot(normalize(in_Normal), light)+la;
 	ldiff = clamp(ldiff,0 ,1);
     out_exColor = vec3(ldiff);
-    gl_Position = rotation * in_Position;
+    gl_Position = projection * translation * rotation * in_Position;
 }

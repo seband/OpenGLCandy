@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 import java.io.*;
 
 public class OBJLoader {
-    public static Model loadModel(File file) throws IOException, FileNotFoundException {
+    public static Model loadModel(int program, File file) throws IOException, FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         Model m = new Model();
         String line;
@@ -53,7 +53,7 @@ public class OBJLoader {
             }
         }
         br.close();
-        m.GenerateBuffers();
+        m.GenerateBuffers(program);
         return m;
     }
 }

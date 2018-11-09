@@ -108,16 +108,10 @@ public class HelloWorld {
         glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
-        Camera mainCamera = new Camera(90, 1, -10f, 1000f);
+        Camera mainCamera = new Camera(30, 1, 0.1f, 1000f);
         ObjectScene scene = new ObjectScene(mainCamera);
         Model model;
-        try {
-            model = OBJLoader.loadModel(new File("models/bunny.obj"));
-            GameObject gc = new GameObject(model);
-            scene.addGameObject(gc);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         /*******/
         // Run the rendering loop until the user has attempted to close
