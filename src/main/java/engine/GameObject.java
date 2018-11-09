@@ -11,7 +11,7 @@ public class GameObject{
         this.model = model;
     }
     public void update(){
-        transform.rot = new Matrix4f().rotateX(0.1f).mul(transform.rot);
+        transform.rot = new Matrix4f().rotateX(0.01f).mul(transform.rot);
     }
 
     public void draw(Camera camera) {

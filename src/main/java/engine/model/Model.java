@@ -15,6 +15,7 @@ import utils.OBJLoader;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 public class Model {
@@ -52,11 +53,9 @@ public class Model {
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO);
 
-        setUniform("", transform.rot);
-
-
+        setUniform("rotation", transform.rot);
         // Draw the vertices
-        GL11.glDrawElements(GL11.GL_TRIANGLES, faces.size()*3, GL11.GL_UNSIGNED_BYTE, 0);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, faces.size()*3, GL11.GL_UNSIGNED_INT, 0);
 
         // Put everything back to default (deselect)
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -65,9 +64,8 @@ public class Model {
 
         GL20.glUseProgram(0);
     }
-    public void setUniform(String uniformName, Matrix4f value) {
-        // Dump the matrix into a float buffer
-        int rotationLocation = GL20.glGetUniformLocation(program, "rotation");
+    public void setUniform(String name, Matrix4f value) {
+        int rotationLocation = GL20.glGetUniformLocation(program, name);
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer fb = stack.mallocFloat(16);
             value.get(fb);
@@ -88,13 +86,13 @@ public class Model {
         return vb;
     }
 
-    public ByteBuffer getIndicesBuffer() {
-        ByteBuffer verticesBuffer = BufferUtils.createByteBuffer(faces.size()*3);
-        byte[] vb = new byte[faces.size()*3];
+    public IntBuffer getIndicesBuffer() {
+        IntBuffer verticesBuffer = BufferUtils.createIntBuffer(faces.size()*3);
+        int[] vb = new int[faces.size()*3];
         for(int i=0; i< faces.size(); i++) {
-            vb[i*3] = (byte)faces.get(i).vertices.x;
-            vb[i*3+1] = (byte)faces.get(i).vertices.y;
-            vb[i*3+2] = (byte)faces.get(i).vertices.z;
+            vb[i*3] = (faces.get(i).vertices.x);
+            vb[i*3+1] = faces.get(i).vertices.y;
+            vb[i*3+2] = faces.get(i).vertices.z;
         }
         verticesBuffer.put(vb);
         verticesBuffer.flip();
@@ -130,7 +128,7 @@ public class Model {
 
     public void GenerateBuffers() {
         FloatBuffer verticesBuffer = getVerticesBuffer();
-        ByteBuffer  indicesBuffer = getIndicesBuffer();
+        IntBuffer  indicesBuffer = getIndicesBuffer();
 
 
         VAO = GL30.glGenVertexArrays();

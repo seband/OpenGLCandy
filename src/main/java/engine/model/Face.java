@@ -2,6 +2,7 @@ package engine.model;
 
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.ArrayList;
 

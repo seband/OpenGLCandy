@@ -106,11 +106,11 @@ public class HelloWorld {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
-        Camera mainCamera = new Camera(90, 1, 0.1f, 1000f);
+        Camera mainCamera = new Camera(90, 1, -10f, 1000f);
         ObjectScene scene = new ObjectScene(mainCamera);
         Model model;
         try {
-            model = OBJLoader.loadModel(new File("models/box.obj"));
+            model = OBJLoader.loadModel(new File("models/bunny.obj"));
             GameObject gc = new GameObject(model);
             scene.addGameObject(gc);
         } catch (IOException e) {
@@ -121,6 +121,7 @@ public class HelloWorld {
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             scene.draw();
 
