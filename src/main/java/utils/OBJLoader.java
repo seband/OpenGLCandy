@@ -14,7 +14,10 @@ public class OBJLoader {
         while ((line = br.readLine()) != null) {
             String[] split = line.split(" ");
             switch (split[0]) {
-                case "v": // Vertex v v1 v2 v3
+              case "o":
+              //TODO: Add new model
+              break;
+              case "v": // Vertex v v1 v2 v3
                     m.vertices.add(new Vector3f(Float.valueOf(split[1]), Float.valueOf(split[2]), Float.valueOf(split[3])));
                     break;
                 case "vt": // Texture vt vt1 vt2
@@ -27,14 +30,19 @@ public class OBJLoader {
                     break;
                 case "f": // Face [f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3 ...]
                     Face f = new Face();
-                    for (int i = 0; i< split.length; i++) {
-                        String[] values = split[i].split("/");
+                    for (int i = 0; i< split.length-1; i++) {
+                        String[] values = split[i+1].split("/");
                         if(values[0].length() > 0)
                             f.vertices.setComponent(i, Integer.parseInt(values[0])-1);
-                        if(values[1].length() > 0)
-                            f.textureCoords.setComponent(i, Integer.parseInt(values[1])-1);
-                        if(values[2].length() > 0)
-                            f.normals.setComponent(i, Integer.parseInt(values[2])-1);
+                        if(values.length == 2){
+                            if(values[1].length() > 0)
+                                f.normals.setComponent(i, Integer.parseInt(values[1])-1);
+                        }else{
+                            if(values[1].length() > 0)
+                                f.textureCoords.setComponent(i, Integer.parseInt(values[1])-1);
+                            if(values[2].length() > 0)
+                                f.normals.setComponent(i, Integer.parseInt(values[2])-1);
+                        }
                     }
                     m.faces.add(f);
 

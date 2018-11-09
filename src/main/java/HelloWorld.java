@@ -1,8 +1,16 @@
+import engine.Camera;
+import engine.GameObject;
+import engine.ObjectScene;
+
+import engine.model.Model;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
+import utils.OBJLoader;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -96,15 +104,27 @@ public class HelloWorld {
         GL.createCapabilities();
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+        /*******/
+        Camera mainCamera = new Camera(90, 1, 0.1f, 1000f);
+        ObjectScene scene = new ObjectScene(mainCamera);
+        Model model;
+        try {
+            model = OBJLoader.loadModel(new File("models/box.obj"));
+            GameObject gc = new GameObject(model);
+            scene.addGameObject(gc);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        /*******/
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+            scene.draw();
 
             glfwSwapBuffers(window); // swap the color buffers
-
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
