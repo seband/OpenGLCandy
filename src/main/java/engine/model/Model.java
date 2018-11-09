@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Model {
     Transform transform = new Transform();
-    int VAO, VBO, program;
+    int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL, program;
     public ArrayList<Vector3f> vertices = new ArrayList<>();
     public ArrayList<Vector3f> normals = new ArrayList<>();
     public ArrayList<Face> faces = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Model {
 
         GL20.glEnableVertexAttribArray(0);
 
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO);
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
 
         setUniform("rotation", transform.rot);
         // Draw the vertices
@@ -86,17 +86,30 @@ public class Model {
         return vb;
     }
 
-    public IntBuffer getIndicesBuffer() {
-        IntBuffer verticesBuffer = BufferUtils.createIntBuffer(faces.size()*3);
-        int[] vb = new int[faces.size()*3];
-        for(int i=0; i< faces.size(); i++) {
-            vb[i*3] = (faces.get(i).vertices.x);
-            vb[i*3+1] = faces.get(i).vertices.y;
-            vb[i*3+2] = faces.get(i).vertices.z;
+    public FloatBuffer getNormalsBuffer(){
+        FloatBuffer nb = BufferUtils.createFloatBuffer(normals.size()*3);
+        float[] nba = new float[normals.size()*3];
+        for(int i=0; i< normals.size(); i++) {
+            nba[i*3] = normals.get(i).x;
+            nba[i*3+1] = normals.get(i).y;
+            nba[i*3+2] = normals.get(i).z;
         }
-        verticesBuffer.put(vb);
-        verticesBuffer.flip();
-        return verticesBuffer;
+        nb.put(nba);
+        nb.flip();
+        return nb;
+    }
+
+    public IntBuffer getIndicesBuffer() {
+        IntBuffer indicesBuffer = BufferUtils.createIntBuffer(faces.size()*3);
+        int[] ib = new int[faces.size()*3];
+        for(int i=0; i< faces.size(); i++) {
+            ib[i*3] = (faces.get(i).vertices.x);
+            ib[i*3+1] = faces.get(i).vertices.y;
+            ib[i*3+2] = faces.get(i).vertices.z;
+        }
+        indicesBuffer.put(ib);
+        indicesBuffer.flip();
+        return indicesBuffer;
     }
 
     public FloatBuffer getSimpleVerticesBuffer(){
@@ -128,21 +141,36 @@ public class Model {
 
     public void GenerateBuffers() {
         FloatBuffer verticesBuffer = getVerticesBuffer();
+        FloatBuffer normalBuffer = getNormalsBuffer();
         IntBuffer  indicesBuffer = getIndicesBuffer();
 
 
         VAO = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(VAO);
 
-        VBO = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
+        VBO_VERTEX = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO_VERTEX);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, verticesBuffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(GL20.glGetAttribLocation(program, "in_Position"), 3, GL11.GL_FLOAT, false, 0, 0);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+
+        // VBO for normal data
+        /*glBindBuffer(GL_ARRAY_BUFFER, bunnyNormalBufferObjID);
+        glBufferData(GL_ARRAY_BUFFER, m->numVertices*3*sizeof(GLfloat), m->normalArray, GL_STATIC_DRAW);
+        glVertexAttribPointer(glGetAttribLocation(program, "in_Normal"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(glGetAttribLocation(program, "in_Normal"));
+        */
+
+        VBO_NORMAL = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO_NORMAL);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, normalBuffer, GL15.GL_STATIC_DRAW);
+        GL20.glVertexAttribPointer(GL20.glGetAttribLocation(program, "in_Normal"), 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glEnableVertexAttribArray(GL20.glGetAttribLocation(program, "in_Normal"));
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         GL30.glBindVertexArray(0);
 
-        VBO = GL15.glGenBuffers();
-        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO);
+        VBO_INDEX = GL15.glGenBuffers();
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL15.GL_STATIC_DRAW);
         // Deselect (bind to 0) the VBO
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
