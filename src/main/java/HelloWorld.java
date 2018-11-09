@@ -104,6 +104,8 @@ public class HelloWorld {
         GL.createCapabilities();
 
         // Set the clear color
+
+        glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
         Camera mainCamera = new Camera(90, 1, -10f, 1000f);

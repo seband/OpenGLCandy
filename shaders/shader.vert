@@ -1,10 +1,16 @@
 #version 150 core
 
 in vec4 in_Position;
-in vec4 in_Normal;
+in vec3 in_Normal;
 uniform mat4 rotation;
-out vec4 out_Normal;
+out vec3 out_exColor;
 void main(void) {
-    out_Normal = in_Normal;
+    const vec3 light = vec3(0.78, 0.78, 0.78);
+	float kd = 1;
+	float ll = 0.9f;
+	float la = 0.9f;
+	float ldiff = kd*ll*dot(normalize(in_Normal), light)+la;
+	ldiff = clamp(ldiff,0 ,1);
+    out_exColor = vec3(ldiff);
     gl_Position = rotation * in_Position;
 }

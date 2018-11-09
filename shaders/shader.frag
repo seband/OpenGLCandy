@@ -2,7 +2,7 @@
 
 
 out vec4 out_Color;
-in vec4 out_Normal;
+in vec3 out_exColor;
 void main(void) {
-    out_Color = vec4(out_Normal.x,out_Normal.y,out_Normal.z,1);
+    out_Color = vec4(out_exColor.x,out_exColor.y,out_exColor.z,1);
 }
