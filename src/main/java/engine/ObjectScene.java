@@ -22,7 +22,7 @@ public class ObjectScene extends AbstractScene {
 
     private void initScene(){
         try {
-            GameObject gc = new GameObject(OBJLoader.loadModel(mainProgram, new File("models/bunny.obj")));
+            GameObject gc = new GameObject(OBJLoader.loadModel(mainProgram, new File("models/box.obj")));
             addGameObject(gc);
 
             gc = new GameObject(OBJLoader.loadModel(mainProgram, new File("models/bunny.obj")));

@@ -35,9 +35,8 @@ public class Model {
         GL20.glEnableVertexAttribArray(0);
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
-
-        utils.BufferUtils.setUniform(program,"rotation", transform.rot);
-        utils.BufferUtils.setUniform(program,"translation", new Matrix4f().translate(transform.position));
+        Matrix4f modelView = new Matrix4f().translate(transform.position).mul(new Matrix4f().scale(transform.scale).mul(transform.rot));
+        utils.BufferUtils.setUniform(program,"modelView", modelView);
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, faces.size()*3, GL11.GL_UNSIGNED_INT, 0);
@@ -59,7 +58,8 @@ public class Model {
         VAO = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(VAO);
         VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Position", verticesBuffer);
-        VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer);
+        if(normals.size()>0)
+            VBO_NORMAL = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer);
         VBO_INDEX = utils.BufferUtils.create_VBO(program, indicesBuffer);
 
         GL30.glBindVertexArray(0);
