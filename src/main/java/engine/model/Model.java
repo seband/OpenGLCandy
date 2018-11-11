@@ -15,21 +15,16 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 public class Model {
-    Transform transform = new Transform();
     int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE;
-   /* public ArrayList<Vector3f> vertices = new ArrayList<>();
-    public ArrayList<Vector3f> normals = new ArrayList<>();
-    public ArrayList<Vector2f> textureCoordinates = new ArrayList<>();
-    public ArrayList<Face> faces = new ArrayList<>();
-*/
-   float[] vertices, normals, textureCoords;
-   int[] indicies;
+
+   private float[] vertices, normals, textureCoords;
+   private int[] indicies;
 
 
-    public Texture texture;
+    private Texture texture;
+    private Material material;
 
 
-    public Model(){}
     public Model(float[] vertices, float[] normals, float[] textureCoords, int[] indicies){
         this.vertices = vertices;
         this.normals = normals;
@@ -39,6 +34,22 @@ public class Model {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public int getTextureId(){
+        return texture.getId();
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public Material getMaterial() {
+        return material;
     }
 
     public void draw(int program, Camera camera, Transform transform) {

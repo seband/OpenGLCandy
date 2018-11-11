@@ -26,8 +26,8 @@ public class MainScene extends ObjectScene {
     @Override
     protected void initScene() {
         try {
-            Model m = ModelLoader.loadModel(mainProgram, new File("models/box.obj"));
-            m.texture = TextureLoader.loadTexture(new File("textures/UVMap.png"));
+            Model m = ModelLoader.loadModel(mainProgram, new File("models/Mailbox.obj"));
+            m.setTexture(TextureLoader.loadTexture(new File("textures/DiffuseMap.png")));
             GameObject gc = new AnimatedGameObject(m);
             addGameObject(gc);
 

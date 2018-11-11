@@ -13,21 +13,14 @@ public class ModelLoader {
      * @param file containing models
      * @return models
      */
-    public static Model loadModel(int program, File file, boolean flipUVs){
-        AIScene scene;
-        if(flipUVs)
-            scene = Assimp.aiImportFile(file.toString(),
+    public static Model loadModel(int program, File file){
+        AIScene scene = Assimp.aiImportFile(file.toString(),
                     Assimp.aiProcess_Triangulate |
                             Assimp.aiProcess_GenSmoothNormals |
                             Assimp.aiProcess_FlipUVs |
                             Assimp.aiProcess_CalcTangentSpace
             );
-        else
-            scene = Assimp.aiImportFile(file.toString(),
-                    Assimp.aiProcess_Triangulate |
-                            Assimp.aiProcess_GenSmoothNormals |
-                            Assimp.aiProcess_CalcTangentSpace
-            );
+
         AIMesh mesh = AIMesh.create(scene.mMeshes().get(0));
         //Setup arrays
         float vertices[]	 = new float[mesh.mNumVertices() * 3];

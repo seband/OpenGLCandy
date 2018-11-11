@@ -22,7 +22,7 @@ public class TextureLoader {
             IntBuffer h = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
-            stbi_set_flip_vertically_on_load(true);
+            stbi_set_flip_vertically_on_load(false);
             buffer = stbi_load(file.getPath(), w, h, channels, 4);
             if (buffer == null)
                 throw new TextureLoadException();

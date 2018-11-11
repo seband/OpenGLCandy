@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 
 public class Texture {
-    int width, height, id;
+    private int width, height, id;
 
     /**
      * Texture
