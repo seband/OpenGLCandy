@@ -3,6 +3,7 @@ package engine.model;
 import engine.Camera;
 import engine.Transform;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -15,18 +16,30 @@ import java.util.ArrayList;
 
 public class Model {
     Transform transform = new Transform();
-    int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL;
-    public ArrayList<Vector3f> vertices = new ArrayList<>();
+    int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE;
+   /* public ArrayList<Vector3f> vertices = new ArrayList<>();
     public ArrayList<Vector3f> normals = new ArrayList<>();
+    public ArrayList<Vector2f> textureCoordinates = new ArrayList<>();
     public ArrayList<Face> faces = new ArrayList<>();
+*/
+   float[] vertices, normals, textureCoords;
+   int[] indicies;
 
-    public Model(ArrayList<Vector3f> vertices, ArrayList<Vector3f> normals, ArrayList<Face> faces){
-        this.vertices = vertices;
-        this.normals = normals;
-        this.faces = faces;
-    }
+
+    public Texture texture;
+
 
     public Model(){}
+    public Model(float[] vertices, float[] normals, float[] textureCoords, int[] indicies){
+        this.vertices = vertices;
+        this.normals = normals;
+        this.textureCoords = textureCoords;
+        this.indicies = indicies;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
 
     public void draw(int program, Camera camera, Transform transform) {
         GL20.glUseProgram(program);
@@ -38,8 +51,12 @@ public class Model {
         Matrix4f modelView = new Matrix4f().translate(transform.position).mul(new Matrix4f().scale(transform.scale).mul(transform.rot));
         utils.BufferUtils.setUniform(program,"modelView", modelView);
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
+        if(textureCoords.length>0 && texture != null){
+            texture.bindTexure();
+            texture.setLocation(program, "texUnit", 0);
+        }
         // Draw the vertices
-        GL11.glDrawElements(GL11.GL_TRIANGLES, faces.size()*3, GL11.GL_UNSIGNED_INT, 0);
+        GL11.glDrawElements(GL11.GL_TRIANGLES, indicies.length, GL11.GL_UNSIGNED_INT, 0);
 
         // Put everything back to default (deselect)
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -53,13 +70,16 @@ public class Model {
     public void GenerateBuffers(int program) {
         FloatBuffer verticesBuffer = utils.BufferUtils.getFloatBuffer(vertices);
         FloatBuffer normalBuffer = utils.BufferUtils.getFloatBuffer(normals);
-        IntBuffer  indicesBuffer = utils.BufferUtils.getIndicesBuffer(faces);
+        FloatBuffer textureCoordBuffer = utils.BufferUtils.getFloatBuffer(textureCoords);
+        IntBuffer  indicesBuffer = utils.BufferUtils.getIntBuffer(indicies);
 
         VAO = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(VAO);
-        VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Position", verticesBuffer);
-        if(normals.size()>0)
-            VBO_NORMAL = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer);
+        VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Position", verticesBuffer,3);
+        if(normals.length>0)
+            VBO_NORMAL = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer,3);
+        if(textureCoords.length>0)
+            VBO_TEXTURE = utils.BufferUtils.create_VBO(program, "in_TexCoord", textureCoordBuffer,2);
         VBO_INDEX = utils.BufferUtils.create_VBO(program, indicesBuffer);
 
         GL30.glBindVertexArray(0);

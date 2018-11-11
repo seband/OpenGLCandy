@@ -2,9 +2,13 @@
 
 in vec4 in_Position;
 in vec3 in_Normal;
+in vec2 in_TexCoord;
+
 uniform mat4 modelView;
 uniform mat4 projection;
 out vec3 out_exColor;
+out vec2 out_TexCoord;
+
 void main(void) {
     const vec3 light = vec3(0.78, 0.78, 0.78);
 	float kd = 1;
@@ -14,4 +18,6 @@ void main(void) {
 	ldiff = clamp(ldiff,0 ,1);
     out_exColor = vec3(ldiff);
     gl_Position = projection * modelView * in_Position;
+    out_TexCoord = in_TexCoord;
+
 }

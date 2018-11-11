@@ -18,4 +18,6 @@ public abstract class AbstractScene implements Drawable{
     public void removeGameObject(GameObject go){
         gameObjectList.remove(go);
     }
+
+    public abstract void draw();
 }

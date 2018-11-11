@@ -2,6 +2,7 @@ package utils;
 
 import engine.model.Face;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
@@ -9,47 +10,41 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryStack;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 
 public class BufferUtils {
+
     /**
-     * Generate floatbuffer object from vector list
-     * @param vectors
-     * @return buffer for upload
+     * Create FloatBuffer from array
+     * @param array data
+     * @return buffer
      */
-    public static FloatBuffer getFloatBuffer(ArrayList<Vector3f> vectors){
-        FloatBuffer nb = org.lwjgl.BufferUtils.createFloatBuffer(vectors.size()*3);
-        float[] nba = new float[vectors.size()*3];
-        for(int i=0; i< vectors.size(); i++) {
-            nba[i*3] = vectors.get(i).x;
-            nba[i*3+1] = vectors.get(i).y;
-            nba[i*3+2] = vectors.get(i).z;
-        }
-        nb.put(nba);
+    public static FloatBuffer getFloatBuffer(float[] array){
+        FloatBuffer nb = org.lwjgl.BufferUtils.createFloatBuffer(array.length);
+        nb.put(array);
         nb.flip();
         return nb;
     }
 
     /**
-     * Generate intbuffer object from faces list
-     * @param faces
-     * @return buffer for upload
+     * Create IntBuffer from array
+     * @param array data
+     * @return buffer
      */
-    public static IntBuffer getIndicesBuffer(ArrayList<Face> faces) {
-        IntBuffer indicesBuffer = org.lwjgl.BufferUtils.createIntBuffer(faces.size()*3);
-        int[] ib = new int[faces.size()*3];
-        for(int i=0; i< faces.size(); i++) {
-            ib[i*3] = (faces.get(i).vertices.x);
-            ib[i*3+1] = faces.get(i).vertices.y;
-            ib[i*3+2] = faces.get(i).vertices.z;
-        }
-        indicesBuffer.put(ib);
-        indicesBuffer.flip();
-        return indicesBuffer;
+    public static IntBuffer getIntBuffer(int[] array){
+        IntBuffer nb = org.lwjgl.BufferUtils.createIntBuffer(array.length);
+        nb.put(array);
+        nb.flip();
+        return nb;
     }
+
 
     /**
      * Set uniform in shader program
@@ -73,11 +68,11 @@ public class BufferUtils {
      * @param buffer data to upload
      * @return VBO identifier
      */
-    public static int create_VBO(int program, String name, FloatBuffer buffer){
+    public static int create_VBO(int program, String name, FloatBuffer buffer, int length){
         int VBO = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, VBO);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(GL20.glGetAttribLocation(program, name), 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glBufferData(GL20.GL_ARRAY_BUFFER, buffer, GL20.GL_STATIC_DRAW);
+        GL20.glVertexAttribPointer(GL20.glGetAttribLocation(program, name), length, GL11.GL_FLOAT, false, 0, 0);
         GL20.glEnableVertexAttribArray(GL20.glGetAttribLocation(program, name));
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
         return VBO;
@@ -98,5 +93,4 @@ public class BufferUtils {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
         return VBO;
     }
-
 }

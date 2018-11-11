@@ -1,15 +1,12 @@
 package engine;
 
-import org.joml.Vector3f;
-import utils.OBJLoader;
-import utils.Program;
+public abstract class ObjectScene extends AbstractScene {
+    protected int mainProgram;
 
-import java.io.File;
-import java.io.IOException;
-
-public class ObjectScene extends AbstractScene {
-    int mainProgram;
-
+    /**
+     * Scene with default object drawing
+     * @param camera main camera
+     */
     public ObjectScene(Camera camera) {
         super(camera);
         try {
@@ -20,18 +17,7 @@ public class ObjectScene extends AbstractScene {
         initScene();
     }
 
-    private void initScene(){
-        try {
-            GameObject gc = new GameObject(OBJLoader.loadModel(mainProgram, new File("models/box.obj")));
-            addGameObject(gc);
-
-            gc = new GameObject(OBJLoader.loadModel(mainProgram, new File("models/bunny.obj")));
-            gc.transform.position = new Vector3f(2,0,-3);
-            addGameObject(gc);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    protected abstract void initScene();
 
     public void draw(){
         for(GameObject go: this.gameObjectList)

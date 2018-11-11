@@ -1,16 +1,13 @@
 import engine.Camera;
-import engine.GameObject;
 import engine.ObjectScene;
 
 import engine.model.Model;
+import game.MainScene;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-import utils.OBJLoader;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -57,7 +54,7 @@ public class HelloWorld {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(600, 600, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -109,9 +106,8 @@ public class HelloWorld {
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
         Camera mainCamera = new Camera(30, 1, 0.1f, 1000f);
-        ObjectScene scene = new ObjectScene(mainCamera);
+        ObjectScene scene = new MainScene(mainCamera);
         Model model;
-
 
         /*******/
         // Run the rendering loop until the user has attempted to close
