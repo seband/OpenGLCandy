@@ -3,7 +3,7 @@ package engine;
 import java.util.ArrayList;
 
 public abstract class AbstractScene implements Drawable{
-    Camera camera;
+    protected Camera camera;
 
     protected ArrayList<GameObject> gameObjectList = new ArrayList<>();
 

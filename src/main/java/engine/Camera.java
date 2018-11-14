@@ -50,6 +50,9 @@ public class Camera {
         return projectionMatrix;
     }
 
+    public void setPosition(Vector3f position){
+        this.transform.position = position;
+    }
     public Vector3f getPosition(){
         return transform.position;
     }

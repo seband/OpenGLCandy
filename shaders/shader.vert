@@ -3,21 +3,28 @@
 in vec4 in_Position;
 in vec3 in_Normal;
 in vec2 in_TexCoord;
+in vec3 in_Tangent;
+in vec3 in_Bitangent;
 
 uniform mat4 modelView;
 uniform mat4 projection;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
+out mat3 out_TBN;
+out vec3 ex_Normal;
+out vec3 surf;
 
 void main(void) {
-    const vec3 light = vec3(0.78, 0.78, 0.78);
-	float kd = 1;
-	float ll = 0.9f;
-	float la = 0.9f;
-	float ldiff = kd*ll*dot(normalize(in_Normal), light)+la;
-	ldiff = clamp(ldiff,0 ,1);
-    out_exColor = vec3(ldiff);
-    gl_Position = projection * modelView * in_Position;
-    out_TexCoord = in_TexCoord;
 
+   /* ex_Normal = vec3(inverse(transpose(modelView))* vec4(in_Normal.xyz, 1.0));
+    surf = vec3(modelView  * vec4(in_Position.xyz, 1.0));
+	out_TexCoord=in_TexCoord;*/
+    vec3 T = normalize(vec3(modelView * vec4(in_Tangent,   0.0)));
+    vec3 B = normalize(vec3(modelView * vec4(in_Bitangent, 0.0)));
+    vec3 N = normalize(vec3(modelView * vec4(in_Normal,    0.0)));
+    out_TBN = mat3(T, B, N);
+    ex_Normal = vec3(inverse(transpose(modelView))* vec4(in_Normal.xyz, 1.0));
+    out_TexCoord=in_TexCoord;
+	surf = vec3(modelView * vec4(in_Position.xyz, 1.0));
+	gl_Position=projection*modelView*vec4(in_Position.xyz, 1.0);
 }

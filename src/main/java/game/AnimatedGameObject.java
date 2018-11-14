@@ -11,7 +11,6 @@ import org.joml.Vector3f;
 public class AnimatedGameObject extends GameObject {
     public AnimatedGameObject(Model model) {
         super(model);
-        transform.position = new Vector3f(0,0,-3);
     }
 
     @Override

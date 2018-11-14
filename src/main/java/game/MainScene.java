@@ -26,14 +26,19 @@ public class MainScene extends ObjectScene {
     @Override
     protected void initScene() {
         try {
-            Model m = ModelLoader.loadModel(mainProgram, new File("models/Mailbox.obj"));
-            m.setTexture(TextureLoader.loadTexture(new File("textures/DiffuseMap.png")));
+            Model m = ModelLoader.loadModel(mainProgram, new File("models/box.obj"));
+            m.setTexture(TextureLoader.loadTexture(new File("textures/WeatheredWood2_S.jpg")));
+            m.setNormalMap(TextureLoader.loadTexture(new File("textures/NormalMap.png")));
             GameObject gc = new AnimatedGameObject(m);
+            gc.transform.position = new Vector3f(0,0,-3);
+
             addGameObject(gc);
 
-            GameObject gc2 = new AnimatedGameObject(ModelLoader.loadModel(mainProgram, new File("models/bunny.obj")));
-            gc2.transform.position = new Vector3f(2,0,-3);
+            GameObject gc2 = new AnimatedGameObject(ModelLoader.loadModel(mainProgram, new File("models/box.obj")));
+            gc2.transform.position = new Vector3f(2.0f, 2.0f, -3.0f);
+            gc2.transform.scale = new Vector3f(0.3f, 0.3f, 0.3f);
             addGameObject(gc2);
+            this.camera.setPosition(new Vector3f(3,3,3));
         } catch (Exception e) {
             e.printStackTrace();
         }

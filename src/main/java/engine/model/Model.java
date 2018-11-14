@@ -15,25 +15,30 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 public class Model {
-    int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE;
+    int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE, VBO_TANGENT, VBO_BITANGENT;
 
-   private float[] vertices, normals, textureCoords;
+   private float[] vertices, normals, textureCoords, tangents, bitangents;
    private int[] indicies;
 
 
-    private Texture texture;
+    private Texture texture, normalMap;
     private Material material;
 
 
-    public Model(float[] vertices, float[] normals, float[] textureCoords, int[] indicies){
+    public Model(float[] vertices, float[] normals, float[] textureCoords, float[] tangents, float[] bitangents, int[] indicies){
         this.vertices = vertices;
         this.normals = normals;
         this.textureCoords = textureCoords;
         this.indicies = indicies;
+        this.tangents = tangents;
+        this.bitangents = bitangents;
     }
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+    }
+    public void setNormalMap(Texture texture) {
+        this.normalMap = texture;
     }
 
     public Texture getTexture() {
@@ -61,10 +66,14 @@ public class Model {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
         Matrix4f modelView = new Matrix4f().translate(transform.position).mul(new Matrix4f().scale(transform.scale).mul(transform.rot));
         utils.BufferUtils.setUniform(program,"modelView", modelView);
+        //TODO: Add cameraMatrix
+        //utils.BufferUtils.setUniform(program,"cameraMatrix", camera.getViewMatrix());
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
         if(textureCoords.length>0 && texture != null){
-            texture.bindTexure();
             texture.setLocation(program, "texUnit", 0);
+        }
+        if(normalMap != null){
+            normalMap.setLocation(program, "normalMap", 1);
         }
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, indicies.length, GL11.GL_UNSIGNED_INT, 0);
@@ -81,12 +90,19 @@ public class Model {
     public void GenerateBuffers(int program) {
         FloatBuffer verticesBuffer = utils.BufferUtils.getFloatBuffer(vertices);
         FloatBuffer normalBuffer = utils.BufferUtils.getFloatBuffer(normals);
+        FloatBuffer tangentsBuffer = utils.BufferUtils.getFloatBuffer(tangents);
+        FloatBuffer bitangentsBuffer = utils.BufferUtils.getFloatBuffer(bitangents);
         FloatBuffer textureCoordBuffer = utils.BufferUtils.getFloatBuffer(textureCoords);
         IntBuffer  indicesBuffer = utils.BufferUtils.getIntBuffer(indicies);
 
+        //Setup VAO
         VAO = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(VAO);
+
+        //Setup VBOs
         VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Position", verticesBuffer,3);
+        VBO_TANGENT = utils.BufferUtils.create_VBO(program, "in_Tangent", tangentsBuffer,3);
+        VBO_BITANGENT = utils.BufferUtils.create_VBO(program, "in_Bitangent", bitangentsBuffer,3);
         if(normals.length>0)
             VBO_NORMAL = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer,3);
         if(textureCoords.length>0)
@@ -94,6 +110,5 @@ public class Model {
         VBO_INDEX = utils.BufferUtils.create_VBO(program, indicesBuffer);
 
         GL30.glBindVertexArray(0);
-
     }
 }

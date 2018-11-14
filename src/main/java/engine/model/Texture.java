@@ -5,6 +5,8 @@ import org.w3c.dom.Text;
 
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 
 public class Texture {
@@ -48,9 +50,11 @@ public class Texture {
         bindTexure();
         setParameter(GL20.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_BORDER);
         setParameter(GL20.GL_TEXTURE_WRAP_T, GL20.GL_CLAMP_TO_BORDER);
-        setParameter(GL20.GL_TEXTURE_MIN_FILTER, GL20.GL_NEAREST);
-        setParameter(GL20.GL_TEXTURE_MAG_FILTER, GL20.GL_NEAREST);
+        setParameter(GL20.GL_TEXTURE_MIN_FILTER, GL20.GL_LINEAR);
+        setParameter(GL20.GL_TEXTURE_MAG_FILTER, GL20.GL_LINEAR);
+        GL20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_GENERATE_MIPMAP,GL20.GL_TRUE);
         GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, data);
+
     }
 
     /**
@@ -62,6 +66,7 @@ public class Texture {
     }
 
     public void setLocation(int program, String location, int texUnit){
+        glActiveTexture(GL_TEXTURE0 + texUnit);
         bindTexure();
         glUniform1i(GL20.glGetUniformLocation(program, location), texUnit);
     }
