@@ -2,10 +2,8 @@
 
 
 out vec4 out_Color;
-in vec3 out_exColor;
 in vec2 out_TexCoord;
 in mat3 out_TBN;
-in vec3 ex_Normal;
 in vec3 surf;
 
 uniform sampler2D texUnit;

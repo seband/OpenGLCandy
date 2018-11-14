@@ -11,20 +11,21 @@ uniform mat4 projection;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
 out mat3 out_TBN;
-out vec3 ex_Normal;
 out vec3 surf;
 
 void main(void) {
-
-   /* ex_Normal = vec3(inverse(transpose(modelView))* vec4(in_Normal.xyz, 1.0));
-    surf = vec3(modelView  * vec4(in_Position.xyz, 1.0));
-	out_TexCoord=in_TexCoord;*/
+    //TBN-matrix for normalmapping (tangent space)
     vec3 T = normalize(vec3(modelView * vec4(in_Tangent,   0.0)));
     vec3 B = normalize(vec3(modelView * vec4(in_Bitangent, 0.0)));
     vec3 N = normalize(vec3(modelView * vec4(in_Normal,    0.0)));
     out_TBN = mat3(T, B, N);
-    ex_Normal = vec3(inverse(transpose(modelView))* vec4(in_Normal.xyz, 1.0));
+
+    //Passthrough texcoords
     out_TexCoord=in_TexCoord;
+
+    //Surface location for fragment (for light calc)
 	surf = vec3(modelView * vec4(in_Position.xyz, 1.0));
+
+	//Set position
 	gl_Position=projection*modelView*vec4(in_Position.xyz, 1.0);
 }
