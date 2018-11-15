@@ -1,5 +1,6 @@
 package utils;
 
+import engine.model.DepthTexture;
 import engine.model.Face;
 import engine.model.Texture;
 import org.joml.Matrix4f;
@@ -100,7 +101,7 @@ public class BufferUtils {
      * @param tex texture to render to
      * @return id of FBO
      */
-    public static int create_depth_FBO(Texture tex){
+    public static int create_depth_FBO(DepthTexture tex){
         int fbo = GL30.glGenFramebuffers();
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
         GL30.glDrawBuffer(GL11.GL_NONE);

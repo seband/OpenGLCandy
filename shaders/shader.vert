@@ -11,7 +11,7 @@ uniform mat4 projection;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
 out mat3 out_TBN;
-out vec3 surf;
+out vec4 surf;
 
 void main(void) {
     //TBN-matrix for normalmapping (tangent space)
@@ -24,7 +24,7 @@ void main(void) {
     out_TexCoord=in_TexCoord;
 
     //Surface location for fragment (for light calc)
-	surf = vec3(modelView * vec4(in_Position.xyz, 1.0));
+	surf = modelView * in_Position;
 
 	//Set position
 	gl_Position=projection*modelView*vec4(in_Position.xyz, 1.0);

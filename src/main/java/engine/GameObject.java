@@ -1,5 +1,6 @@
 package engine;
 
+import engine.model.DepthTexture;
 import engine.model.Model;
 import engine.model.Texture;
 import org.joml.Matrix4f;
@@ -20,5 +21,8 @@ public abstract class GameObject{
     }
     public void setTexture(Texture tex){
         model.setTexture(tex);
+    }
+    public void setDepthTexture(DepthTexture tex){
+        model.setDepthTexture(tex);
     }
 }

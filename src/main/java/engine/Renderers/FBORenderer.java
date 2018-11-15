@@ -9,7 +9,6 @@ public abstract class FBORenderer extends Renderer{
     protected int FBO;
     public FBORenderer(int program, int width, int height){
         super(program);
-        tex = new Texture(width, height);
     }
 
     public Texture getTexture(){

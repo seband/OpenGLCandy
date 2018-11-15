@@ -4,7 +4,7 @@
 out vec4 out_Color;
 in vec2 out_TexCoord;
 in mat3 out_TBN;
-in vec3 surf;
+in vec4 surf;
 
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
@@ -12,7 +12,7 @@ uniform sampler2D normalMap;
 void main(void) {
     //Light vectors
     vec3 lightDirection = vec3(2.0f, -2.0f, 1.0f);
-    vec3 lightDir   = normalize(lightDirection - surf);
+    vec3 lightDir   = normalize(lightDirection - surf.xyz);
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;
@@ -31,12 +31,12 @@ void main(void) {
 
     //Specular light
     float shininess = 16.0f;
-	vec3 viewDir = normalize(-surf);
+	vec3 viewDir = normalize(-surf.xyz);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0f), shininess);
     vec3 specular = vec3(1.0f) * spec;
 
     //Sum of calculated light
     out_Color = vec4(ambient + diffuse + specular, 1.0);
-    }
+}
 

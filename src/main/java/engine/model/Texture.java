@@ -11,7 +11,9 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.glUniform1i;
 
 public class Texture {
-    private int width, height, id;
+    protected int width;
+    protected int height;
+    protected int id;
 
     /**
      * Texture
@@ -43,7 +45,7 @@ public class Texture {
      * Generate a new texture
      * @return the new texture's id
      */
-    private int generateTexture(){
+    protected int generateTexture(){
         return GL20.glGenTextures();
     }
 
@@ -52,7 +54,7 @@ public class Texture {
      * @param parameter
      * @param value
      */
-    private void setParameter(int parameter, int value){
+    protected void setParameter(int parameter, int value){
         GL20.glTexParameteri(GL20.GL_TEXTURE_2D, parameter, value);
     }
 
@@ -65,7 +67,7 @@ public class Texture {
         GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, data);
     }
 
-    private void setupTexture(){
+    protected void setupTexture(){
         this.id = generateTexture();
         bindTexure();
         setParameter(GL20.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_BORDER);

@@ -2,9 +2,7 @@ package game;
 
 
 import engine.*;
-import engine.Renderers.FBORenderer;
-import engine.Renderers.FBOSceneRenderer;
-import engine.Renderers.TextureRenderer;
+import engine.Renderers.*;
 import engine.model.Model;
 import engine.model.SquareModel;
 import engine.model.Texture;
@@ -21,20 +19,27 @@ import java.io.File;
  * Main scene for testing
  */
 public class MainScene extends AbstractScene {
-    int mainProgram, textureProgram;
+    int mainProgram, textureProgram, radialBlurProgram, depthTextureProgram;
     FBORenderer sceneRenderer;
     TextureRenderer textureRenderer;
+    FBOGodRayRenderer godRayRenderer;
+    FBODepthRenderer depthTextureRenderer;
     GameObject square;
     public MainScene(Camera camera) {
         super(camera);
         try {
             mainProgram = utils.Program.createProgram("shaders/shader.vert", "shaders/shader.frag");
             textureProgram = utils.Program.createProgram("shaders/textureShader.vert", "shaders/textureShader.frag");
+            radialBlurProgram = utils.Program.createProgram("shaders/radialBlurShader.vert", "shaders/radialBlurShader.frag");
+            depthTextureProgram = utils.Program.createProgram("shaders/shader.vert", "shaders/shader.frag");
         }catch (Exception e){
             System.out.println("Program creation failed");
         }
         sceneRenderer = new FBOSceneRenderer(mainProgram, 600, 600);
+        godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, 600, 600);
+        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 600, 600);
         textureRenderer = new TextureRenderer(textureProgram);
+
         square  = new StaticGameObject(new SquareModel(textureProgram));
         square.transform.position = new Vector3f(0,0,-2);
         initScene();
@@ -46,7 +51,6 @@ public class MainScene extends AbstractScene {
     protected void initScene() {
         try {
             Model m = ModelLoader.loadModel(mainProgram, new File("models/mini_wood_barrel.obj"));
-            //Model m = new SquareModel(mainProgram);
             m.setTexture(TextureLoader.loadTexture(new File("textures/mini_diffus.tga")));
             m.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
             GameObject gc = new AnimatedGameObject(m);
@@ -66,8 +70,16 @@ public class MainScene extends AbstractScene {
         //Render GameObjects
         gameObjectList.forEach(x -> sceneRenderer.draw(x, camera));
 
+        //Make godrays
+       // gameObjectList.forEach(x -> depthTextureRenderer.draw(x, camera));
+
+
+    //    square.setTexture(sceneRenderer.getTexture());
+        //square.setDepthTexture(depthTextureRenderer.getDtex());
+        godRayRenderer.draw(square, camera);
+
         //Render FBO result
-        square.setTexture(sceneRenderer.getTexture());
+        square.setTexture(godRayRenderer.getTexture());
         textureRenderer.draw(square, camera);
     }
 }

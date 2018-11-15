@@ -26,6 +26,7 @@ public class Model {
 
 
     private Texture texture, normalMap;
+    private DepthTexture depthTexture;
     private Material material;
 
 
@@ -47,6 +48,10 @@ public class Model {
     }
     public void setNormalMap(Texture texture) {
         this.normalMap = texture;
+    }
+
+    public void setDepthTexture(DepthTexture depthTexture) {
+        this.depthTexture = depthTexture;
     }
 
     public Texture getTexture() {
@@ -82,6 +87,9 @@ public class Model {
         }
         if(textureCoords.length>0 && normalMap != null){
             normalMap.setLocation(program, "normalMap", 1);
+        }
+        if(depthTexture != null){
+            depthTexture.setLocation(program, "depthTexture", 2);
         }
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, indicies.length, GL11.GL_UNSIGNED_INT, 0);
