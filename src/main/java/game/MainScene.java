@@ -5,6 +5,7 @@ import engine.Camera;
 import engine.GameObject;
 import engine.ObjectScene;
 import engine.model.Model;
+import engine.model.SquareModel;
 import org.joml.Vector3f;
 import utils.ModelLoader;
 import utils.TextureLoader;
@@ -26,11 +27,12 @@ public class MainScene extends ObjectScene {
     @Override
     protected void initScene() {
         try {
-            Model m = ModelLoader.loadModel(mainProgram, new File("models/box.obj"));
-            m.setTexture(TextureLoader.loadTexture(new File("textures/WeatheredWood2_S.jpg")));
-            m.setNormalMap(TextureLoader.loadTexture(new File("textures/NormalMap.png")));
+            //Model m = ModelLoader.loadModel(mainProgram, new File("models/mini_wood_barrel.obj"));
+            Model m = new SquareModel(mainProgram);
+            m.setTexture(TextureLoader.loadTexture(new File("textures/mini_diffus.tga")));
+            //m.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
             GameObject gc = new AnimatedGameObject(m);
-            gc.transform.position = new Vector3f(0,0,-3);
+            gc.transform.position = new Vector3f(0,0,-2);
 
             addGameObject(gc);
 

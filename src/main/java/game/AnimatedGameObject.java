@@ -15,6 +15,6 @@ public class AnimatedGameObject extends GameObject {
 
     @Override
     public void update() {
-        transform.rot = new Matrix4f().rotateX(0.005f).mul(transform.rot);
+        transform.rot = new Matrix4f().rotateY(0.005f).mul(transform.rot);
     }
 }

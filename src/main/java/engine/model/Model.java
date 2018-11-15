@@ -17,8 +17,12 @@ import java.util.ArrayList;
 public class Model {
     int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE, VBO_TANGENT, VBO_BITANGENT;
 
-   private float[] vertices, normals, textureCoords, tangents, bitangents;
-   private int[] indicies;
+   protected float[] vertices;
+    private float[] normals;
+    protected float[] textureCoords;
+    private float[] tangents;
+    private float[] bitangents;
+   protected int[] indicies;
 
 
     private Texture texture, normalMap;
@@ -32,6 +36,10 @@ public class Model {
         this.indicies = indicies;
         this.tangents = tangents;
         this.bitangents = bitangents;
+    }
+
+    public Model(){
+
     }
 
     public void setTexture(Texture texture) {
@@ -72,7 +80,7 @@ public class Model {
         if(textureCoords.length>0 && texture != null){
             texture.setLocation(program, "texUnit", 0);
         }
-        if(normalMap != null){
+        if(textureCoords.length>0 && normalMap != null){
             normalMap.setLocation(program, "normalMap", 1);
         }
         // Draw the vertices
@@ -89,9 +97,15 @@ public class Model {
 
     public void GenerateBuffers(int program) {
         FloatBuffer verticesBuffer = utils.BufferUtils.getFloatBuffer(vertices);
-        FloatBuffer normalBuffer = utils.BufferUtils.getFloatBuffer(normals);
-        FloatBuffer tangentsBuffer = utils.BufferUtils.getFloatBuffer(tangents);
-        FloatBuffer bitangentsBuffer = utils.BufferUtils.getFloatBuffer(bitangents);
+        FloatBuffer normalBuffer = null;
+        if(normals != null)
+            normalBuffer = utils.BufferUtils.getFloatBuffer(normals);
+        FloatBuffer tangentsBuffer = null;
+        if(tangents != null)
+            tangentsBuffer = utils.BufferUtils.getFloatBuffer(tangents);
+        FloatBuffer bitangentsBuffer= null;
+        if(bitangents != null)
+            bitangentsBuffer = utils.BufferUtils.getFloatBuffer(bitangents);
         FloatBuffer textureCoordBuffer = utils.BufferUtils.getFloatBuffer(textureCoords);
         IntBuffer  indicesBuffer = utils.BufferUtils.getIntBuffer(indicies);
 
@@ -101,14 +115,18 @@ public class Model {
 
         //Setup VBOs
         VBO_VERTEX = utils.BufferUtils.create_VBO(program, "in_Position", verticesBuffer,3);
-        VBO_TANGENT = utils.BufferUtils.create_VBO(program, "in_Tangent", tangentsBuffer,3);
-        VBO_BITANGENT = utils.BufferUtils.create_VBO(program, "in_Bitangent", bitangentsBuffer,3);
-        if(normals.length>0)
+        if(tangentsBuffer != null)
+            VBO_TANGENT = utils.BufferUtils.create_VBO(program, "in_Tangent", tangentsBuffer,3);
+        if(bitangentsBuffer != null)
+            VBO_BITANGENT = utils.BufferUtils.create_VBO(program, "in_Bitangent", bitangentsBuffer,3);
+        if(normalBuffer != null)
             VBO_NORMAL = utils.BufferUtils.create_VBO(program, "in_Normal", normalBuffer,3);
-        if(textureCoords.length>0)
+        if(textureCoordBuffer != null)
             VBO_TEXTURE = utils.BufferUtils.create_VBO(program, "in_TexCoord", textureCoordBuffer,2);
         VBO_INDEX = utils.BufferUtils.create_VBO(program, indicesBuffer);
 
         GL30.glBindVertexArray(0);
     }
+
+
 }
