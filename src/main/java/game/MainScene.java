@@ -71,11 +71,11 @@ public class MainScene extends AbstractScene {
         gameObjectList.forEach(x -> sceneRenderer.draw(x, camera));
 
         //Make godrays
-       // gameObjectList.forEach(x -> depthTextureRenderer.draw(x, camera));
+        gameObjectList.forEach(x -> depthTextureRenderer.draw(x, camera));
 
 
-    //    square.setTexture(sceneRenderer.getTexture());
-        //square.setDepthTexture(depthTextureRenderer.getDtex());
+        square.setTexture(sceneRenderer.getTexture());
+        square.setDepthTexture(depthTextureRenderer.getDtex());
         godRayRenderer.draw(square, camera);
 
         //Render FBO result
