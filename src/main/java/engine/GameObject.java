@@ -25,4 +25,11 @@ public abstract class GameObject{
     public void setDepthTexture(DepthTexture tex){
         model.setDepthTexture(tex);
     }
+    public boolean getLit(){
+        return model.getLit();
+    }
+
+    public void setFxMap(Texture tex){
+        model.setFxMap(tex);
+    }
 }

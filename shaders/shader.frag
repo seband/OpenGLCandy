@@ -11,7 +11,7 @@ uniform sampler2D normalMap;
 
 void main(void) {
     //Light vectors
-    vec3 lightDirection = vec3(2.0f, -2.0f, 1.0f);
+    vec3 lightDirection = vec3(2,2,-8);
     vec3 lightDir   = normalize(lightDirection - surf.xyz);
 
     //Texture sampling

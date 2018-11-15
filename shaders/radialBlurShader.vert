@@ -10,9 +10,10 @@ uniform mat4 modelView;
 uniform mat4 projection;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
-
+out vec3 out_light_pos;
 void main(void) {
 
+    out_light_pos = (projection * modelView * vec4(2,2,-8,1)).xyz;
     //Passthrough texcoords
     out_TexCoord=in_TexCoord;
 

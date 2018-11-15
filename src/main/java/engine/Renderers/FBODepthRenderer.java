@@ -15,11 +15,15 @@ public class FBODepthRenderer extends FBORenderer{
     }
 
     @Override
-    public void draw(GameObject gc, Camera camera) {
+    public void beforeDraw() {
         BufferUtils.bindFBO(FBO);
         glClearColor(0.0f, 0.0f, 0.0f, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+    }
+
+    @Override
+    public void draw(GameObject gc, Camera camera) {
         gc.draw(program, camera);
     }
 

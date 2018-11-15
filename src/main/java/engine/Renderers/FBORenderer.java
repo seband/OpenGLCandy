@@ -9,6 +9,7 @@ public abstract class FBORenderer extends Renderer{
         super(program);
     }
 
+    public abstract void beforeDraw();
     public Texture getTexture(){
         return tex;
     }

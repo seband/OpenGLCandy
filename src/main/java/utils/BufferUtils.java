@@ -64,6 +64,17 @@ public class BufferUtils {
     }
 
     /**
+     * Set uniform in shader program
+     * @param program active program
+     * @param name name for location
+     * @param value value of uniform
+     */
+    public static void setUniform(int program, String name, boolean value) {
+        int uniformLocation = GL20.glGetUniformLocation(program, name);
+        GL20.glUniform1i(uniformLocation, value? 1 : 0);
+    }
+
+    /**
      * Create VBO with provided data
      * @param program active shader program
      * @param name name for location

@@ -25,10 +25,9 @@ public class Model {
    protected int[] indicies;
 
 
-    private Texture texture, normalMap;
+    private Texture texture, normalMap, fxMap;
     private DepthTexture depthTexture;
-    private Material material;
-
+    private Material material = new Material(1,1,1,1, true);
 
     public Model(float[] vertices, float[] normals, float[] textureCoords, float[] tangents, float[] bitangents, int[] indicies){
         this.vertices = vertices;
@@ -49,7 +48,17 @@ public class Model {
     public void setNormalMap(Texture texture) {
         this.normalMap = texture;
     }
+    public void setLit(boolean lit){
+        this.material.lit = lit;
+    }
 
+    public void setFxMap(Texture fxMap) {
+        this.fxMap = fxMap;
+    }
+
+    public boolean getLit(){
+        return this.material.lit;
+    }
     public void setDepthTexture(DepthTexture depthTexture) {
         this.depthTexture = depthTexture;
     }
@@ -82,6 +91,7 @@ public class Model {
         //TODO: Add cameraMatrix
         //utils.BufferUtils.setUniform(program,"cameraMatrix", camera.getViewMatrix());
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
+        utils.BufferUtils.setUniform(program, "isLit", material.lit);
         if(textureCoords.length>0 && texture != null){
             texture.setLocation(program, "texUnit", 0);
         }
@@ -90,6 +100,9 @@ public class Model {
         }
         if(depthTexture != null){
             depthTexture.setLocation(program, "depthTexture", 2);
+        }
+        if(fxMap != null){
+            fxMap.setLocation(program, "fxMap", 3);
         }
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, indicies.length, GL11.GL_UNSIGNED_INT, 0);

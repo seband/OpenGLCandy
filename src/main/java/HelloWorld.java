@@ -106,7 +106,7 @@ public class HelloWorld {
         //glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
-        Camera mainCamera = new Camera(30, 1, 0.1f, 3f);
+        Camera mainCamera = new Camera(30, 1, 0.1f, 50f);
         AbstractScene scene = new MainScene(mainCamera);
         Model model;
 
