@@ -1,6 +1,7 @@
 package engine.model;
 
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 import org.w3c.dom.Text;
 
 import java.nio.ByteBuffer;
@@ -22,6 +23,20 @@ public class Texture {
         this.width = width;
         this.height = height;
         setupTexture(data);
+    }
+
+    public Texture(int width, int height) {
+        this.width = width;
+        this.height = height;
+        setupTexture();
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
     /**
@@ -46,6 +61,11 @@ public class Texture {
      * @param data
      */
     private void setupTexture(ByteBuffer data){
+        setupTexture();
+        GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, data);
+    }
+
+    private void setupTexture(){
         this.id = generateTexture();
         bindTexure();
         setParameter(GL20.GL_TEXTURE_WRAP_S, GL20.GL_CLAMP_TO_BORDER);
@@ -53,8 +73,7 @@ public class Texture {
         setParameter(GL20.GL_TEXTURE_MIN_FILTER, GL20.GL_LINEAR);
         setParameter(GL20.GL_TEXTURE_MAG_FILTER, GL20.GL_LINEAR);
         GL20.glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_GENERATE_MIPMAP,GL20.GL_TRUE);
-        GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, data);
-
+        GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, (ByteBuffer) null);
     }
 
     /**

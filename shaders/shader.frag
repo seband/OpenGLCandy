@@ -11,7 +11,7 @@ uniform sampler2D normalMap;
 
 void main(void) {
     //Light vectors
-    vec3 lightDirection = vec3( 2.0f, 2.0f, -2.0f);
+    vec3 lightDirection = vec3(2.0f, -2.0f, 1.0f);
     vec3 lightDir   = normalize(lightDirection - surf);
 
     //Texture sampling
@@ -23,7 +23,7 @@ void main(void) {
     normal = normalize(out_TBN* normal);
 
     //Ambient light
-    vec3 ambient = 0.05 * tex;
+    vec3 ambient = 0.2f * tex;
 
     //Diffuse light
     float diff = max(dot(lightDir, normal), 0.0f);

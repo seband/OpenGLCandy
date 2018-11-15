@@ -1,3 +1,4 @@
+import engine.AbstractScene;
 import engine.Camera;
 import engine.ObjectScene;
 
@@ -102,11 +103,11 @@ public class HelloWorld {
 
         // Set the clear color
 
-        glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
         Camera mainCamera = new Camera(30, 1, 0.1f, 1000f);
-        ObjectScene scene = new MainScene(mainCamera);
+        AbstractScene scene = new MainScene(mainCamera);
         Model model;
 
         /*******/

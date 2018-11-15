@@ -1,6 +1,7 @@
 package engine;
 
 import engine.model.Model;
+import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -16,5 +17,8 @@ public abstract class GameObject{
         update();
         if(model != null)
             model.draw(program, camera, transform);
+    }
+    public void setTexture(Texture tex){
+        model.setTexture(tex);
     }
 }

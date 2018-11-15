@@ -1,6 +1,7 @@
 package utils;
 
 import engine.model.Face;
+import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -94,5 +95,50 @@ public class BufferUtils {
         return VBO;
     }
 
+    /**
+     * Generate FBO for depth buffer rendering
+     * @param tex texture to render to
+     * @return id of FBO
+     */
+    public static int create_depth_FBO(Texture tex){
+        int fbo = GL30.glGenFramebuffers();
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+        GL30.glDrawBuffer(GL11.GL_NONE);
+        GL30.glReadBuffer(GL11.GL_NONE);
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, tex.getId(), 0);
+        int fboStatus = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+        if (fboStatus != GL30.GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("FBO Creation Error");
+        }
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+        return fbo;
+    }
+
+
+    /**
+     * Generate FBO for color rendering
+     * @param tex texture to render to
+     * @return id of FBO
+     */
+    public static int create_FBO(Texture tex){
+        int fbo = GL30.glGenFramebuffers();
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, tex.getId(), 0);
+        int rb = GL30.glGenRenderbuffers();
+        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, rb);
+        GL30.glRenderbufferStorage( GL30.GL_RENDERBUFFER, GL30.GL_DEPTH_COMPONENT24, tex.getWidth(), tex.getHeight());
+        GL30.glFramebufferRenderbuffer( GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT, GL30.GL_RENDERBUFFER, rb );
+
+        int fboStatus = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
+        if (fboStatus != GL30.GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("FBO Creation Error");
+        }
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+        return fbo;
+    }
+
+    public static void bindFBO(int fbo){
+        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
+    }
 
 }
