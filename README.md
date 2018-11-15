@@ -6,7 +6,7 @@ This project is an OpenGL app that aims to provide an implementation of *Normal 
 - [X] Buffer generation
 - [X] OBJ-importer
 - [ ] Input-handler
-- [ ] FBO-handler
+- [X] FBO-handler
 - [X] Normal Mapping
 - [ ] Shadow Mapping
 - [ ] SSAO
