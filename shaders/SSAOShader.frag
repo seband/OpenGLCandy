@@ -1,4 +1,4 @@
-#version 150
+#version 150 core
 
 out vec4 out_Color;
 in vec2 out_TexCoord;
