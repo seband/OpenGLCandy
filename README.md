@@ -10,3 +10,4 @@ This project is an OpenGL app that aims to provide an implementation of *Normal 
 - [X] Normal Mapping
 - [ ] Shadow Mapping
 - [ ] SSAO
+- [X] GodRays
