@@ -8,6 +8,7 @@ in vec4 surf;
 
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
+uniform int isLit;
 
 void main(void) {
     //Light vectors
@@ -38,5 +39,8 @@ void main(void) {
 
     //Sum of calculated light
     out_Color = vec4(ambient + diffuse + specular, 1.0);
+    if(isLit == 1){
+        out_Color = vec4(1,1,1,1);
+    }
 }
 

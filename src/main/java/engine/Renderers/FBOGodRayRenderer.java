@@ -16,7 +16,7 @@ public class FBOGodRayRenderer extends FBORenderer{
     }
 
     @Override
-    public void beforeDraw() {
+    protected void beforeDraw() {
         BufferUtils.bindFBO(FBO);
         glClearColor(0.0f, 0.0f, 0.0f, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -24,7 +24,7 @@ public class FBOGodRayRenderer extends FBORenderer{
     }
 
     @Override
-    public void draw(GameObject gc, Camera camera) {
+    protected void render(GameObject gc, Camera camera) {
         gc.draw(program, camera);
     }
 }

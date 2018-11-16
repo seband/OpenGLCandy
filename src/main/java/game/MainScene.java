@@ -13,6 +13,7 @@ import org.lwjgl.opengl.*;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 /**
@@ -24,6 +25,7 @@ public class MainScene extends AbstractScene {
     TextureRenderer textureRenderer;
     FBODepthRenderer depthTextureRenderer;
     GameObject square;
+    ArrayList<GameObject> fxObjectList = new ArrayList<>();
     public MainScene(Camera camera) {
         super(camera);
         try {
@@ -43,6 +45,7 @@ public class MainScene extends AbstractScene {
 
         square  = new StaticGameObject(new SquareModel(textureProgram));
         square.transform.position = new Vector3f(0,0,-2);
+        fxObjectList.add(square);
         initScene();
     }
 
@@ -62,7 +65,6 @@ public class MainScene extends AbstractScene {
             addGameObject(gc);
 
             Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
-            sun.setTexture(TextureLoader.loadTexture(new File("textures/sun.png")));
             GameObject sunGC = new StaticGameObject(sun);
             sunGC.transform.position = new Vector3f(2,2,-8);
             sunGC.transform.scale = new Vector3f(3);
@@ -78,25 +80,19 @@ public class MainScene extends AbstractScene {
     @Override
     public void draw() {
         //Render GameObjects
-        sceneRenderer.beforeDraw();
-        gameObjectList.forEach(x -> {if(!x.getLit())sceneRenderer.draw(x, camera);});
+        sceneRenderer.draw(gameObjectList, camera);
+
+        //gameObjectList.forEach(x -> {if(!x.getLit())sceneRenderer.draw(x, camera);});
 
         //Render GameObjects
-        noLightRenderer.beforeDraw();
-        gameObjectList.forEach(x -> noLightRenderer.draw(x, camera));
-
-        //Make godrays
-      //  depthTextureRenderer.beforeDraw();
-      //  gameObjectList.forEach(x -> depthTextureRenderer.draw(x, camera));
-
+        noLightRenderer.draw(gameObjectList, camera);
 
         square.setTexture(noLightRenderer.getTexture());
         square.setFxMap(sceneRenderer.getTexture());
-        godRayRenderer.beforeDraw();
-        godRayRenderer.draw(square, camera);
+        godRayRenderer.draw(fxObjectList, camera);
 
         //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
-        textureRenderer.draw(square, camera);
+        textureRenderer.draw(fxObjectList, camera);
     }
 }

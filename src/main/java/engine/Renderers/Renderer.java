@@ -3,6 +3,8 @@ package engine.Renderers;
 import engine.Camera;
 import engine.GameObject;
 
+import java.util.List;
+
 public abstract class Renderer {
     protected int program;
 
@@ -10,5 +12,10 @@ public abstract class Renderer {
         this.program = program;
     }
 
-    public abstract void draw(GameObject gc, Camera camera);
+    public void draw(List<GameObject> gc, Camera camera){
+        beforeDraw();
+        gc.forEach(o ->{render(o, camera);});
+    }
+    protected abstract void render(GameObject gc, Camera camera);
+    protected abstract void beforeDraw();
 }
