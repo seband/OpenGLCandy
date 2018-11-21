@@ -5,6 +5,7 @@ import engine.*;
 import engine.Renderers.*;
 import engine.model.Model;
 import engine.model.SquareModel;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import utils.ModelLoader;
 import utils.TextureLoader;
@@ -58,18 +59,28 @@ public class MainScene extends AbstractScene {
             m.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
             m.setLit(false);
             GameObject gc = new AnimatedGameObject(m);
-            gc.transform.position = new Vector3f(0,0,-2);
+            gc.transform.position = new Vector3f(0,1,-2);
             gc.transform.scale= new Vector3f(0.01f,0.01f,0.01f);
 
             addGameObject(gc);
 
             Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
-            GameObject sunGC = new StaticGameObject(sun);
-            sunGC.transform.position = new Vector3f(2,2,-8);
+            GameObject sunGC = new GameObject(sun) {
+                boolean right=true;
+                @Override
+                public void update() {
+                    if(this.transform.position.x > 8)
+                        right = false;
+                    else if(this.transform.position.x <-8)
+                        right = true;
+                    this.transform.position.x = right ? this.transform.position.x+0.01f : this.transform.position.x-0.01f;
+                }
+            };
+            sunGC.transform.position = new Vector3f(8,3,-40);
             sunGC.transform.scale = new Vector3f(3);
             addGameObject(sunGC);
-
-            this.camera.setPosition(new Vector3f(3,3,3));
+            new Sun(sunGC);
+            this.camera.setPosition(new Vector3f(0,0,0));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +97,7 @@ public class MainScene extends AbstractScene {
         //Render GameObjects
         noLightRenderer.draw(gameObjectList, camera);
 
-        depthTextureRenderer.draw(gameObjectList, camera);
+//        depthTextureRenderer.draw(gameObjectList, camera);
 
         square.setTexture(noLightRenderer.getTexture());
         square.setFxMap(sceneRenderer.getTexture());
@@ -95,9 +106,10 @@ public class MainScene extends AbstractScene {
         //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
 
-        square.setDepthTexture(depthTextureRenderer.getDtex());
-        SSAORenderer.draw(fxObjectList, camera);
+        //square.setDepthTexture(depthTextureRenderer.getDtex());
+        //SSAORenderer.draw(fxObjectList, camera);
        // square.setTexture(SSAORenderer.getTexture());
         textureRenderer.draw(fxObjectList, camera);
+
     }
 }

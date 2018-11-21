@@ -14,7 +14,7 @@ public class Camera {
         this.near = near;
         this.far = far;
         this.projectionMatrix = new Matrix4f().perspective(fov, aspectRatio, near, far);
-        this.viewMatrix = new Matrix4f().identity();
+        this.viewMatrix = new Matrix4f().lookAt(transform.position, new Vector3f(0,0,-1), new Vector3f(0,1,0));
     }
 
     public Transform getTransform() {
@@ -23,6 +23,7 @@ public class Camera {
 
     public void setTransform(Transform transform) {
         this.transform = transform;
+        this.viewMatrix = new Matrix4f().lookAt(transform.position, new Vector3f(0,1,0), new Vector3f(0,0,1));
     }
 
     public void setProjectionMatrix(Matrix4f projectionMatrix) {
@@ -52,12 +53,14 @@ public class Camera {
 
     public void setPosition(Vector3f position){
         this.transform.position = position;
+        this.viewMatrix = new Matrix4f().lookAt(transform.position, new Vector3f(0,0,-1), new Vector3f(0,1,0));
     }
     public Vector3f getPosition(){
         return transform.position;
     }
 
     public Matrix4f getViewMatrix() {
+
         return viewMatrix;
     }
 
@@ -66,6 +69,6 @@ public class Camera {
      * @param v point to look at
      */
     public void setLookAt(Vector3f v){
-        viewMatrix = new Matrix4f().setLookAt(transform.position, v, transform.position.cross(v).normalize());
+        viewMatrix = new Matrix4f().lookAt(transform.position, v, transform.position.cross(v).normalize());
     }
 }

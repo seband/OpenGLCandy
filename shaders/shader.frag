@@ -8,12 +8,12 @@ in vec4 surf;
 
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
+uniform vec3 lightPosition;
 uniform int isLit;
 
 void main(void) {
     //Light vectors
-    vec3 lightDirection = vec3(2,2,-8);
-    vec3 lightDir   = normalize(lightDirection - surf.xyz);
+    vec3 lightDir   = normalize(lightPosition - surf.xyz);
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;

@@ -7,7 +7,7 @@ in vec2 out_TexCoord;
 uniform sampler2D texUnit;
 
 void main(void) {
-
-    out_Color = vec4(texture(texUnit, out_TexCoord).xyz, 1.0);
+    vec2 tex = vec2(out_TexCoord.x, 1.0f - out_TexCoord.y);
+    out_Color = vec4(texture(texUnit, tex).xyz, 1.0);
 }
 

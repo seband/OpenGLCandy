@@ -6,6 +6,7 @@ import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -72,6 +73,16 @@ public class BufferUtils {
     public static void setUniform(int program, String name, boolean value) {
         int uniformLocation = GL20.glGetUniformLocation(program, name);
         GL20.glUniform1i(uniformLocation, value? 1 : 0);
+    }
+    /**
+     * Set uniform in shader program
+     * @param program active program
+     * @param name name for location
+     * @param value value of uniform
+     */
+    public static void setUniform(int program, String name, Vector3f value) {
+        int uniformLocation = GL20.glGetUniformLocation(program, name);
+        GL20.glUniform3f(uniformLocation, value.x, value.y, value.z);
     }
 
     /**
