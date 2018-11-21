@@ -11,8 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelLoader {
+
+    public static Model loadModel(int program, File file){
+        return loadModels(program, file).get(0);
+    }
+
     /**
-     * Loads modelsfrom file
+     * Loads models from file
      * @param program for uploading
      * @param file containing models
      * @return models
