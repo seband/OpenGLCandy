@@ -3,6 +3,7 @@ This project is an OpenGL app that aims to provide an implementation of *Normal 
 
 ## TODO
 - [ ] Reusable FBOs
+- [ ] Clean up uploads to GPU
 
 ## Feature-list
 - [X] Basic project stucture
