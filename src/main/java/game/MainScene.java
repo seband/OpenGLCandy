@@ -54,7 +54,7 @@ public class MainScene extends AbstractScene {
      */
     protected void initScene() {
         try {
-            Model m = ModelLoader.loadModel(mainProgram, new File("models/mini_wood_barrel.obj"));
+            Model m = ModelLoader.loadModels(mainProgram, new File("models/mini_wood_barrel.obj")).get(0);
             m.setTexture(TextureLoader.loadTexture(new File("textures/mini_diffus.tga")));
             m.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
             m.setLit(false);
@@ -69,7 +69,7 @@ public class MainScene extends AbstractScene {
             gc2.transform.scale= new Vector3f(0.01f,0.01f,0.01f);
             addGameObject(gc2);
 
-            Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
+            Model sun = ModelLoader.loadModels(mainProgram, new File("models/sun.obj")).get(0);
             GameObject sunGC = new GameObject(sun) {
                 boolean right=true;
                 @Override
