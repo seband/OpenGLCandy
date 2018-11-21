@@ -98,7 +98,7 @@ public class Model {
             normalMap.setLocation(program, "normalMap", 1);
         }
         if(depthTexture != null){
-            depthTexture.setLocation(program, "depthTexture", 2);
+            depthTexture.setLocation(program, "depthMap", 2);
         }
         if(fxMap != null){
             fxMap.setLocation(program, "fxMap", 3);

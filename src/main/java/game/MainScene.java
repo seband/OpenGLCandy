@@ -5,12 +5,9 @@ import engine.*;
 import engine.Renderers.*;
 import engine.model.Model;
 import engine.model.SquareModel;
-import engine.model.Texture;
 import org.joml.Vector3f;
 import utils.ModelLoader;
 import utils.TextureLoader;
-import org.lwjgl.opengl.*;
-import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,8 +17,8 @@ import java.util.ArrayList;
  * Main scene for testing
  */
 public class MainScene extends AbstractScene {
-    int mainProgram, textureProgram, radialBlurProgram, depthTextureProgram, noLightProgram;
-    FBORenderer sceneRenderer, noLightRenderer,godRayRenderer;
+    int mainProgram, textureProgram, radialBlurProgram, depthTextureProgram, noLightProgram, SSAOProgram;
+    FBORenderer sceneRenderer, noLightRenderer,godRayRenderer, SSAORenderer;
     TextureRenderer textureRenderer;
     FBODepthRenderer depthTextureRenderer;
     GameObject square;
@@ -34,13 +31,15 @@ public class MainScene extends AbstractScene {
             textureProgram = utils.Program.createProgram("shaders/textureShader.vert", "shaders/textureShader.frag");
             radialBlurProgram = utils.Program.createProgram("shaders/radialBlurShader.vert", "shaders/radialBlurShader.frag");
             depthTextureProgram = utils.Program.createProgram("shaders/shader.vert", "shaders/shader.frag");
+            SSAOProgram = utils.Program.createProgram("shaders/SSAOShader.vert", "shaders/SSAOShader.frag");
         }catch (Exception e){
             System.out.println("Program creation failed");
         }
         sceneRenderer = new FBOSceneRenderer(mainProgram, 600, 600);
         noLightRenderer = new FBOSceneRenderer(noLightProgram, 600, 600);
         godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, 600, 600);
-       // depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 600, 600);
+        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 600, 600);
+        SSAORenderer = new FBOSSAORenderer(SSAOProgram, 600, 600);
         textureRenderer = new TextureRenderer(textureProgram);
 
         square  = new StaticGameObject(new SquareModel(textureProgram));
@@ -87,12 +86,18 @@ public class MainScene extends AbstractScene {
         //Render GameObjects
         noLightRenderer.draw(gameObjectList, camera);
 
+        depthTextureRenderer.draw(gameObjectList, camera);
+
         square.setTexture(noLightRenderer.getTexture());
         square.setFxMap(sceneRenderer.getTexture());
         godRayRenderer.draw(fxObjectList, camera);
 
         //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
+
+        square.setDepthTexture(depthTextureRenderer.getDtex());
+        SSAORenderer.draw(fxObjectList, camera);
+       // square.setTexture(SSAORenderer.getTexture());
         textureRenderer.draw(fxObjectList, camera);
     }
 }

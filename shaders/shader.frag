@@ -40,7 +40,7 @@ void main(void) {
     //Sum of calculated light
     out_Color = vec4(ambient + diffuse + specular, 1.0);
     if(isLit == 1){
-        out_Color = vec4(1,1,1,1);
+        out_Color = vec4(0,0,0,0);
     }
 }
 
