@@ -13,7 +13,7 @@ out vec2 out_TexCoord;
 out vec3 out_light_pos;
 void main(void) {
   //Passthrough texcoords
-  out_TexCoord=in_TexCoord;
+    out_TexCoord=in_TexCoord;
 
 	//Set position
 	gl_Position=vec4(in_Position.xyz, 1.0);

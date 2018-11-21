@@ -64,6 +64,11 @@ public class MainScene extends AbstractScene {
 
             addGameObject(gc);
 
+            GameObject gc2 = new AnimatedGameObject(m);
+            gc2.transform.position = new Vector3f(0.5f,1,-3);
+            gc2.transform.scale= new Vector3f(0.01f,0.01f,0.01f);
+            addGameObject(gc2);
+
             Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
             GameObject sunGC = new GameObject(sun) {
                 boolean right=true;
@@ -97,7 +102,6 @@ public class MainScene extends AbstractScene {
         //Render GameObjects
         noLightRenderer.draw(gameObjectList, camera);
 
-//        depthTextureRenderer.draw(gameObjectList, camera);
 
         square.setTexture(noLightRenderer.getTexture());
         square.setFxMap(sceneRenderer.getTexture());
@@ -106,9 +110,11 @@ public class MainScene extends AbstractScene {
         //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
 
-        //square.setDepthTexture(depthTextureRenderer.getDtex());
-        //SSAORenderer.draw(fxObjectList, camera);
-       // square.setTexture(SSAORenderer.getTexture());
+        SSAORenderer.draw(fxObjectList, camera);
+        depthTextureRenderer.draw(gameObjectList, camera);
+        square.setDepthTexture(depthTextureRenderer.getDtex());
+        square.setTexture(SSAORenderer.getTexture());
+
         textureRenderer.draw(fxObjectList, camera);
 
     }

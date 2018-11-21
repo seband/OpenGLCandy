@@ -24,7 +24,7 @@ void main(void) {
     normal = normalize(out_TBN* normal);
 
     //Ambient light
-    vec3 ambient = 0.2f * tex;
+    vec3 ambient = 0.5f * tex;
 
     //Diffuse light
     float diff = max(dot(lightDir, normal), 0.0f);
