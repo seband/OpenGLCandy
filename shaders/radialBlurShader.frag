@@ -1,12 +1,11 @@
 #version 150 core
-
+//Godrays-shader based on the works by Nvidia (https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch13.html)
+//Values for the constants as suggested by Julien Moreau-Mathis(https://medium.com/community-play-3d/god-rays-whats-that-5a67f26aeac2)
 
 out vec4 out_Color;
 in vec2 c;
 in vec2 out_TexCoord;
 in vec3 out_light_pos;
-
-
 
 uniform sampler2D texUnit;
 uniform sampler2D fxMap;
