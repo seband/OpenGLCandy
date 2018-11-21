@@ -5,8 +5,10 @@ import engine.*;
 import engine.Renderers.*;
 import engine.model.Model;
 import engine.model.SquareModel;
+import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import utils.ModelLoader;
 import utils.TextureLoader;
 
@@ -54,23 +56,28 @@ public class MainScene extends AbstractScene {
      */
     protected void initScene() {
         try {
-            Model m = ModelLoader.loadModel(mainProgram, new File("models/mini_wood_barrel.obj"));
-            m.setTexture(TextureLoader.loadTexture(new File("textures/mini_diffus.tga")));
-            m.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
-            m.setLit(false);
-            GameObject gc = new AnimatedGameObject(m);
-            gc.transform.position = new Vector3f(0,1,-2);
-            gc.transform.scale= new Vector3f(0.01f,0.01f,0.01f);
+            Texture t = TextureLoader.loadTexture(new File("textures/UVMap.png"));
+            ModelLoader.loadModels(mainProgram, new File("models/untitled.obj")).forEach(model -> {
+            try {
+                model.setTexture(t);
+                //model.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
+                model.setLit(false);
+                GameObject gc = new StaticGameObject(model);
+                /*gc.transform.position = new Vector3f(0,1,2);
+                gc.transform.scale = new Vector3f(0.01f,0.01f,0.01f);
+*/
+                addGameObject(gc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
-            addGameObject(gc);
+        } catch (TextureLoader.TextureLoadException e) {
+            e.printStackTrace();
+        }
 
-            GameObject gc2 = new AnimatedGameObject(m);
-            gc2.transform.position = new Vector3f(0.5f,1,-3);
-            gc2.transform.scale= new Vector3f(0.01f,0.01f,0.01f);
-            addGameObject(gc2);
-
-            Model sun = ModelLoader.loadModels(mainProgram, new File("models/sun.obj"));
-            GameObject sunGC = new GameObject(sun) {
+        Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
+        GameObject sunGC = new GameObject(sun) {
                 boolean right=true;
                 @Override
                 public void update() {
@@ -81,19 +88,18 @@ public class MainScene extends AbstractScene {
                     this.transform.position.x = right ? this.transform.position.x+0.01f : this.transform.position.x-0.01f;
                 }
             };
-            sunGC.transform.position = new Vector3f(8,3,-40);
-            sunGC.transform.scale = new Vector3f(3);
-            addGameObject(sunGC);
-            new Sun(sunGC);
-            this.camera.setPosition(new Vector3f(0,0,0));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sunGC.transform.position = new Vector3f(8,3,40);
+        sunGC.transform.scale = new Vector3f(3);
+        addGameObject(sunGC);
+        new Sun(sunGC);
+        this.camera.setPosition(new Vector3f(0,0,0));
+
     }
 
 
     @Override
-    public void draw() {
+    public void render() {
+
         //Render GameObjects
         sceneRenderer.draw(gameObjectList, camera);
 
@@ -110,11 +116,10 @@ public class MainScene extends AbstractScene {
         //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
 
-        SSAORenderer.draw(fxObjectList, camera);
         depthTextureRenderer.draw(gameObjectList, camera);
         square.setDepthTexture(depthTextureRenderer.getDtex());
+        SSAORenderer.draw(fxObjectList, camera);
         square.setTexture(SSAORenderer.getTexture());
-
         textureRenderer.draw(fxObjectList, camera);
 
     }

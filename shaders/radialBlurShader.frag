@@ -20,7 +20,7 @@ void main(void) {
      vec2 texCoord = out_TexCoord;
      float decay=0.96815;
      float exposure=0.1;
-     float density=0.926;
+     float density=1.926;
      float weight=0.58767;
 
      int NUM_SAMPLES = 100;

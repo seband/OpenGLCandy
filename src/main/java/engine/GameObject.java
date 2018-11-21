@@ -15,7 +15,6 @@ public abstract class GameObject{
     public abstract void update();
 
     public void draw(int program, Camera camera) {
-        update();
         if(model != null)
             model.draw(program, camera, transform);
     }

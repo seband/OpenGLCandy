@@ -9,11 +9,12 @@ in vec4 surf;
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
 uniform vec3 lightPosition;
+uniform mat4 modelView;
 uniform int isLit;
 
 void main(void) {
     //Light vectors
-    vec3 lightDir   = normalize(lightPosition - surf.xyz);
+    vec3 lightDir   = normalize((modelView*vec4(lightPosition,1)).xyz - surf.xyz);
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;

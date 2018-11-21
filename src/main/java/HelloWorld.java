@@ -1,5 +1,6 @@
 import engine.AbstractScene;
 import engine.Camera;
+import engine.InputHandler;
 import engine.ObjectScene;
 
 import engine.model.Model;
@@ -8,7 +9,6 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -39,7 +39,7 @@ public class HelloWorld {
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
-
+    private GLFWKeyCallback inputHandler;
     private void init() {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
@@ -60,11 +60,12 @@ public class HelloWorld {
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+       /* glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
-
+*/
+        glfwSetKeyCallback(window, inputHandler = new InputHandler());
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
@@ -114,7 +115,7 @@ public class HelloWorld {
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
-            scene.draw();
+            scene.draw(getDelta());
 
             glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
@@ -122,7 +123,19 @@ public class HelloWorld {
             glfwPollEvents();
         }
     }
+    float t = System.nanoTime();
 
+    public long getTime() {
+        return System.nanoTime() / 1000000;
+    }
+
+    public int getDelta() {
+        long time = getTime();
+        int delta = (int) (time - t);
+        t = time;
+
+        return delta;
+    }
     public static void main(String[] args) {
         new HelloWorld().run();
     }

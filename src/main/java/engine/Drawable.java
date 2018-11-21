@@ -1,5 +1,5 @@
 package engine;
 
 public interface Drawable {
-    void draw();
+    void draw(float deltaT);
 }
