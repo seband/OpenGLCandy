@@ -99,24 +99,28 @@ public class Camera {
     }
     float speed = 0.005f;
     public void update(float deltaT) {
-        speed = InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT)? 0.01f : 0.001f;
+        speed = InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT)? 0.001f : 0.01f;
         float relativeSpeed = speed*deltaT;
         if(InputHandler.keyDown(GLFW.GLFW_KEY_A))
-            yAngle-=relativeSpeed;
+            this.transform.position.add(new Vector3f(relativeSpeed*(float)Math.sin(yAngle),0,relativeSpeed*(float)Math.cos(yAngle)));
         if(InputHandler.keyDown(GLFW.GLFW_KEY_D))
-            yAngle+=relativeSpeed;
+            this.transform.position.sub(new Vector3f(relativeSpeed*(float)Math.sin(yAngle),0,relativeSpeed*(float)Math.cos(yAngle)));
 
-        if(InputHandler.keyDown(GLFW.GLFW_KEY_E))
-            this.transform.position.add(new Vector3f(0,relativeSpeed,0));
+       // System.out.println(InputHandler.getMousePos().y);
+        xAngle-=InputHandler.getMousePos().y*deltaT*0.0003f;
+        yAngle+=InputHandler.getMousePos().x*deltaT*0.0003f;
 
-        if(InputHandler.keyDown(GLFW.GLFW_KEY_Q))
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
             this.transform.position.sub(new Vector3f(0,relativeSpeed,0));
 
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_SPACE))
+            this.transform.position.add(new Vector3f(0,relativeSpeed,0));
+
         if(InputHandler.keyDown(GLFW.GLFW_KEY_W))
-            this.transform.position.add(new Vector3f(relativeSpeed*(float)Math.cos(yAngle),0,-relativeSpeed*(float)Math.sin(yAngle)));
+            this.transform.position.add(new Vector3f(relativeSpeed*(float)Math.cos(yAngle),relativeSpeed*(float)Math.tan(xAngle),-relativeSpeed*(float)Math.sin(yAngle)));
 
         if(InputHandler.keyDown(GLFW.GLFW_KEY_S))
-            this.transform.position.sub(new Vector3f(relativeSpeed*(float)Math.cos(yAngle),0,-relativeSpeed*(float)Math.sin(yAngle)));
+            this.transform.position.sub(new Vector3f(relativeSpeed*(float)Math.cos(yAngle),relativeSpeed*(float)Math.tan(xAngle),-relativeSpeed*(float)Math.sin(yAngle)));
 
         updateViewMatrix();
     }

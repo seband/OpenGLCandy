@@ -63,7 +63,7 @@ void main(void) {
 
     vec3 adjustedShadowCoords = (shadowCoord.xyz / shadowCoord.w) * 0.5 + 0.5;
     float shade = 1.0;
-    float bias = 0.001f;
+    float bias = 0.005f;
     /* Simple sampling
         for (int i=0;i<4;i++){
           if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[i]/700.0 ).z + 0.005f <  adjustedShadowCoords.z ){
@@ -78,6 +78,8 @@ void main(void) {
           if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[index]/700.0 ).z + bias <  adjustedShadowCoords.z )
             shade-=0.1;
     }
+
+
     out_Color = vec4(shade*(ambient + diffuse + specular), 1.0);
 
     if(isLit == 1){

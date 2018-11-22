@@ -44,7 +44,7 @@ public class MainScene extends AbstractScene {
             System.out.println("Program creation failed");
         }
         sceneRenderer = new FBOSceneRenderer(mainProgram, width, height);
-        noLightRenderer = new FBOSceneRenderer(noLightProgram, width, height);
+        noLightRenderer = new FBONoLightRenderer(noLightProgram, width, height);
         godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, width, height);
         depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, width, height);
         SSAORenderer = new FBOSSAORenderer(SSAOProgram, width, height);
@@ -75,17 +75,18 @@ public class MainScene extends AbstractScene {
                     this.transform.position = this.transform.position.rotateY(0.005f);
                 }
             };
-        sunGC.transform.position = new Vector3f(8,30,30);
-        sunGC.transform.scale = new Vector3f(2);
+        sunGC.transform.position = new Vector3f(0,40,40);
+        sunGC.transform.scale = new Vector3f(3);
         addGameObject(sunGC);
         noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());
 
         new Sun(sunGC);
         this.camera.setPosition(new Vector3f(0,0,0));
-
+        System.out.println("Ready");
     }
 
     private void loadCartoonScene() throws TextureLoader.TextureLoadException {
+        System.out.println("Loading Textures...");
         Texture tree1 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_01.png"));
         Texture tree2 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_02.png"));
         Texture tree3 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_03.png"));
@@ -107,6 +108,8 @@ public class MainScene extends AbstractScene {
         Texture tree10_HNormal = TextureLoader.loadTexture(new File("textures/modelNormals/Tree_10_House_normal.png"));
         Texture tree10_TNormal = TextureLoader.loadTexture(new File("textures/modelNormals/Tree_10_Tree_normal.png"));
         Texture backgroundTreeNormal = TextureLoader.loadTexture(new File("textures/modelNormals/BackGround_Tree_normal.png"));
+        System.out.println("Loading Models...");
+
         int i=1;
         for(Model model : ModelLoader.loadModels(mainProgram, new File("models/cartoon.obj"))){
             try {
@@ -133,6 +136,8 @@ public class MainScene extends AbstractScene {
                         model.setNormalMap(tree3Normal);
                         break;
                     case 4:
+                    case 8:
+                    case 7:
                         model.setTexture(tree4);
                         model.setNormalMap(tree4Normal);
                         break;
@@ -151,11 +156,6 @@ public class MainScene extends AbstractScene {
                     case 25:
                         model.setTexture(tree7);
                         model.setNormalMap(tree7Normal);
-                        break;
-                    case 8:
-                    case 7:
-                        model.setTexture(tree3);
-                        model.setNormalMap(tree3Normal);
                         break;
                     case 9:
                         model.setTexture(tree10_T);
@@ -211,7 +211,7 @@ public class MainScene extends AbstractScene {
         camera.setViewMatrix(viewMatrixCache);
 
         camera.setProjectionMatrix(projectionMatrixCache);
-        sceneRenderer.draw(gameObjectList, camera);
+        sceneRenderer.draw(noSunObjectList, camera);
 
         //-------[GOD RAY]-------
         noLightRenderer.draw(gameObjectList, camera);

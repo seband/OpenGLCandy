@@ -78,13 +78,18 @@ public class HelloWorld {
 
             // Get the resolution of the primary monitor
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
+            glfwSetWindowPos(
+                    window,
+                    (vidmode.width()) / 2,
+                    (vidmode.height()) / 2
+            );
             // Center the window
             glfwSetWindowPos(
                     window,
                     (vidmode.width() - pWidth.get(0)) / 2,
                     (vidmode.height() - pHeight.get(0)) / 2
             );
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         } // the stack frame is popped automatically
 
         // Make the OpenGL context current
@@ -116,13 +121,23 @@ public class HelloWorld {
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
-            scene.draw(getDelta());
+            DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+            DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
+            glfwGetCursorPos(window, x, y);
+            x.rewind();
+            y.rewind();
+
+            InputHandler.setMousePos((float)x.get(), (float)y.get());
+
+            scene.draw(getDelta());
             glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
+         //   glfwSetCursorPos(window, width/2, height/2);
         }
+
     }
     float t = System.nanoTime();
 

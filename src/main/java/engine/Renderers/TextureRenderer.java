@@ -15,7 +15,7 @@ public class TextureRenderer extends Renderer{
     @Override
     protected void beforeDraw() {
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0);
+        GL11.glClearColor(0.9f, 0.9f, 1.0f, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
     }

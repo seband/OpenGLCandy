@@ -26,7 +26,7 @@ float readDepth( in vec2 coord )
 }
 
 void main(void){
-   float samples = 1.0f;
+   float samples = 10.0f;
    float weight = 0.3f;
    float dx = 1.0f/800.0f;
    float dy = 1.0f/800.0f;
@@ -40,8 +40,8 @@ void main(void){
         d1 = readDepth( vec2(out_TexCoord.x - dx, out_TexCoord.y + dx));
         d2 = readDepth(vec2(out_TexCoord.x + dx, out_TexCoord.y - dy));
         ao += weight * calculateDepth(d, d1, d2);
-        dx += 1.0f/600.0f;
-        dy += 1.0f/600.0f;
+        dx += 1.0f/800.0f;
+        dy += 1.0f/800.0f;
         weight = 0.2f*(1-i/samples);
    }
    out_Color = texture(texUnit, out_TexCoord)-0.3f*vec4(vec3(ao),1.0f);
