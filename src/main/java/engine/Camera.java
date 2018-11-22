@@ -73,8 +73,11 @@ public class Camera {
     }
 
     public Matrix4f getViewMatrix() {
-
         return viewMatrix;
+    }
+
+    public void setViewMatrix(Matrix4f viewMatrix) {
+        this.viewMatrix = viewMatrix;
     }
 
     /**
@@ -82,9 +85,18 @@ public class Camera {
      * @param v point to look at
      */
     public void setLookAt(Vector3f v){
-        viewMatrix = new Matrix4f().lookAt(transform.position, v, transform.position.cross(v).normalize());
+        viewMatrix = new Matrix4f().lookAt(transform.position, v, up);
     }
 
+    public Matrix4f getOrtho(){
+
+        float height = (float)Math.tan((double)fov / 2.0) * (far + near) / 4.0f;
+        float left = -height * aspectRatio;
+        float right = height * aspectRatio;
+        float bottom = -height;
+        float top = height;
+        return new Matrix4f().ortho(left,right,bottom,top,near,far);
+    }
     float speed = 0.005f;
     public void update(float deltaT) {
         speed = InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT)? 0.01f : 0.001f;

@@ -14,6 +14,8 @@ import utils.TextureLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -26,7 +28,9 @@ public class MainScene extends AbstractScene {
     FBODepthRenderer depthTextureRenderer;
     GameObject square;
     ArrayList<GameObject> fxObjectList = new ArrayList<>();
-    public MainScene(Camera camera) {
+    List<GameObject> noSunObjectList= new ArrayList<>();
+
+    public MainScene(Camera camera, int width, int height) {
         super(camera);
         try {
             mainProgram = utils.Program.createProgram("shaders/shader.vert", "shaders/shader.frag");
@@ -38,11 +42,11 @@ public class MainScene extends AbstractScene {
         }catch (Exception e){
             System.out.println("Program creation failed");
         }
-        sceneRenderer = new FBOSceneRenderer(mainProgram, 600, 600);
-        noLightRenderer = new FBOSceneRenderer(noLightProgram, 600, 600);
-        godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, 600, 600);
-        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 600, 600);
-        SSAORenderer = new FBOSSAORenderer(SSAOProgram, 600, 600);
+        sceneRenderer = new FBOSceneRenderer(mainProgram, width, height);
+        noLightRenderer = new FBOSceneRenderer(noLightProgram, width, height);
+        godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, width, height);
+        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, width, height);
+        SSAORenderer = new FBOSSAORenderer(SSAOProgram, width, height);
         textureRenderer = new TextureRenderer(textureProgram);
 
         square  = new StaticGameObject(new SquareModel(textureProgram));
@@ -73,6 +77,8 @@ public class MainScene extends AbstractScene {
         sunGC.transform.position = new Vector3f(8,40,40);
         sunGC.transform.scale = new Vector3f(3);
         addGameObject(sunGC);
+        noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());
+
         new Sun(sunGC);
         this.camera.setPosition(new Vector3f(0,0,0));
 
@@ -183,26 +189,41 @@ public class MainScene extends AbstractScene {
         }
     }
 
+    private Matrix4f viewMatrixCache;
+    private Matrix4f projectionMatrixCache;
+    private Vector3f cameraPostitionCache;
     @Override
     public void render() {
+        viewMatrixCache = camera.getViewMatrix();
+        projectionMatrixCache = camera.getProjectionMatrix();
+        cameraPostitionCache = camera.getPosition();
+        camera.setPosition(Sun.sun.gc.transform.position);
+        camera.setLookAt(new Vector3f(0,0,0));
+        camera.setProjectionMatrix(camera.getOrtho());
 
-        //Render GameObjects
+        Sun.sun.shadowMatrix = camera.getOrtho().mul(camera.getViewMatrix());
+        //Render GameObjects with Shadows
+        depthTextureRenderer.draw(noSunObjectList, camera);
+        gameObjectList.forEach(gc -> gc.setDepthTexture(depthTextureRenderer.getDtex()));
+        square.setDepthTexture(depthTextureRenderer.getDtex());
+        camera.setPosition(cameraPostitionCache);
+        camera.setViewMatrix(viewMatrixCache);
+
+        camera.setProjectionMatrix(projectionMatrixCache);
         sceneRenderer.draw(gameObjectList, camera);
 
-        //Render GameObjects
+        //-------[GOD RAY]-------
         noLightRenderer.draw(gameObjectList, camera);
-
-
         square.setTexture(noLightRenderer.getTexture());
         square.setFxMap(sceneRenderer.getTexture());
         godRayRenderer.draw(fxObjectList, camera);
-
-        //Render FBO result
         square.setTexture(godRayRenderer.getTexture());
 
-        depthTextureRenderer.draw(gameObjectList, camera);
+        //-------[SSAO]-------
+        depthTextureRenderer.draw(noSunObjectList, camera);
         square.setDepthTexture(depthTextureRenderer.getDtex());
         SSAORenderer.draw(fxObjectList, camera);
+
         square.setTexture(SSAORenderer.getTexture());
         textureRenderer.draw(fxObjectList, camera);
 

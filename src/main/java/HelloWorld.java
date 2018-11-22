@@ -24,6 +24,8 @@ public class HelloWorld {
 
     // The window handle
     private long window;
+    private int width = 800;
+    private int height= 800;
 
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -55,7 +57,7 @@ public class HelloWorld {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(600, 600, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -108,8 +110,7 @@ public class HelloWorld {
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
         Camera mainCamera = new Camera(30, 1, 0.1f, 100f);
-        AbstractScene scene = new MainScene(mainCamera);
-        Model model;
+        AbstractScene scene = new MainScene(mainCamera, width, height);
 
         /*******/
         // Run the rendering loop until the user has attempted to close

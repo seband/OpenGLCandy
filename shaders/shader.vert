@@ -13,6 +13,8 @@ out vec3 out_exColor;
 out vec2 out_TexCoord;
 out mat3 out_TBN;
 out vec3 surf;
+out vec4 shadowCoord;
+uniform mat4 shadowMatrix;
 
 void main(void) {
     //TBN-matrix for normalmapping (tangent space)
@@ -29,4 +31,6 @@ void main(void) {
 
 	//Set position
 	gl_Position=projection*cameraMatrix*modelView*vec4(in_Position.xyz, 1.0);
+	shadowCoord = shadowMatrix*modelView*vec4(in_Position.xyz, 1.0);
+
 }
