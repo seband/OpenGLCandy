@@ -7,19 +7,18 @@ uniform sampler2D depthMap;
 uniform sampler2D texUnit;
 
 float calculateDepth(in float d, in float d1, in float d2){
-  const float a = 10.0; // Difference that gives max occlusion
+  const float a = 20.0; // Difference that gives max occlusion
   float dav = (d1+d2)/2.0;
   float x = d - dav;
   float dao = max( 1.0/a/a*x*(2.0*a - x), 0.0);
-  if(x>3.0f)
-  dao = 0;
+  dao = dao*max(3.0f-x, 0.0);
   return dao;
 }
 
 float readDepth( in vec2 coord )
 {
     float zNear = 0.1f;
-    float zFar = 50.0f;
+    float zFar = 100.0f;
     float z_from_depth_texture = texture(depthMap, coord).x;
     float z_sb = 2.0 * z_from_depth_texture - 1.0; // scale and bias from texture to normalized coords
     float z_world = 2.0 * zNear * zFar / (zFar + zNear - z_sb * (zFar - zNear)); // Get back to real Z

@@ -34,7 +34,6 @@ public class ModelLoader {
         for(int i=0; i< scene.mNumMeshes(); i++){
 
             AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
-
             //Setup arrays
             float vertices[]	 = new float[mesh.mNumVertices() * 3];
             float tangents[]	 = new float[mesh.mNumVertices() * 3];

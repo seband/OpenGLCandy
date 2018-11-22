@@ -14,7 +14,7 @@ uniform int isLit;
 
 void main(void) {
     //Light vectors
-    vec3 lightDir   = normalize((modelView*vec4(lightPosition,1)).xyz - surf.xyz);
+    vec3 lightDir   = normalize(lightPosition - surf.xyz);
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;
@@ -25,7 +25,7 @@ void main(void) {
     normal = normalize(out_TBN* normal);
 
     //Ambient light
-    vec3 ambient = 0.5f * tex;
+    vec3 ambient = 0.3f * tex;
 
     //Diffuse light
     float diff = max(dot(lightDir, normal), 0.0f);
