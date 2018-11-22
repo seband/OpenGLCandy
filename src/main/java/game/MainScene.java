@@ -9,6 +9,7 @@ import engine.model.Texture;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL20;
 import utils.ModelLoader;
 import utils.TextureLoader;
 
@@ -74,8 +75,8 @@ public class MainScene extends AbstractScene {
                     this.transform.position = this.transform.position.rotateY(0.005f);
                 }
             };
-        sunGC.transform.position = new Vector3f(8,40,40);
-        sunGC.transform.scale = new Vector3f(3);
+        sunGC.transform.position = new Vector3f(8,30,30);
+        sunGC.transform.scale = new Vector3f(2);
         addGameObject(sunGC);
         noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());
 
@@ -225,6 +226,7 @@ public class MainScene extends AbstractScene {
         SSAORenderer.draw(fxObjectList, camera);
 
         square.setTexture(SSAORenderer.getTexture());
+
         textureRenderer.draw(fxObjectList, camera);
 
     }

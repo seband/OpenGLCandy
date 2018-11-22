@@ -26,10 +26,10 @@ float readDepth( in vec2 coord )
 }
 
 void main(void){
-   float samples = 10.0f;
+   float samples = 1.0f;
    float weight = 0.3f;
-   float dx = 1.0f/600.0f;
-   float dy = 1.0f/600.0f;
+   float dx = 1.0f/800.0f;
+   float dy = 1.0f/800.0f;
    float d1, d2, d;
    float ao = 0.0f;
    for(int i = 0; i<samples; i++){

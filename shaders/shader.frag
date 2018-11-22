@@ -16,6 +16,15 @@ uniform vec3 lightPosition;
 uniform mat4 modelView;
 uniform int isLit;
 
+vec2 poissonDisk[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
 float readDepth( in vec2 coord )
 {
     float zNear = 0.1f;
@@ -54,10 +63,21 @@ void main(void) {
 
     vec3 adjustedShadowCoords = (shadowCoord.xyz / shadowCoord.w) * 0.5 + 0.5;
     float shade = 1.0;
-    if(texture(depthMap, adjustedShadowCoords.xy).r + 0.001f < adjustedShadowCoords.z){
-        shade = 0.5f;
-    }
+    float bias = 0.001f;
+    /* Simple sampling
+        for (int i=0;i<4;i++){
+          if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[i]/700.0 ).z + 0.005f <  adjustedShadowCoords.z ){
+            shade-=0.2;
+          }
+        }
+    */
 
+    //Stratified sampling
+    for (int i=0;i<4;i++){
+        int index = int(rand(gl_FragCoord.xy * i)*4);
+          if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[index]/700.0 ).z + bias <  adjustedShadowCoords.z )
+            shade-=0.1;
+    }
     out_Color = vec4(shade*(ambient + diffuse + specular), 1.0);
 
     if(isLit == 1){
