@@ -88,7 +88,7 @@ public class Model {
 
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
         Matrix4f modelView = new Matrix4f().translate(transform.position).mul(new Matrix4f().scale(transform.scale).mul(transform.rot));
-        utils.BufferUtils.setUniform(program,"modelView", new Matrix4f().mul(camera.getViewMatrix()).mul(modelView));
+        utils.BufferUtils.setUniform(program,"modelView", modelView);
         utils.BufferUtils.setUniform(program,"cameraMatrix", camera.getViewMatrix());
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
         utils.BufferUtils.setUniform(program, "isLit", material.lit);

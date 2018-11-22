@@ -9,8 +9,6 @@ in vec3 out_light_pos;
 
 uniform sampler2D texUnit;
 uniform sampler2D fxMap;
-uniform mat4 modelView;
-uniform mat4 projection;
 
 void main(void) {
     vec4 tex = texture(fxMap, out_TexCoord);

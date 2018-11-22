@@ -6,8 +6,6 @@ in vec2 in_TexCoord;
 in vec3 in_Tangent;
 in vec3 in_Bitangent;
 
-uniform mat4 modelView;
-uniform mat4 projection;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
 out vec3 out_light_pos;

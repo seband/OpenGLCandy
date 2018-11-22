@@ -4,17 +4,19 @@
 out vec4 out_Color;
 in vec2 out_TexCoord;
 in mat3 out_TBN;
-in vec4 surf;
+in vec3 surf;
 
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
+
+uniform mat4 cameraMatrix;
 uniform vec3 lightPosition;
 uniform mat4 modelView;
 uniform int isLit;
 
 void main(void) {
     //Light vectors
-    vec3 lightDir   = normalize(lightPosition - surf.xyz);
+    vec3 lightDir   = normalize(vec3(cameraMatrix*vec4(lightPosition,1.0)) - surf);
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;
@@ -32,7 +34,7 @@ void main(void) {
     vec3 diffuse = diff * tex;
 
     //Specular light
-    float shininess = 16.0f;
+    float shininess = 128.0f;
 	vec3 viewDir = normalize(-surf.xyz);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0f), shininess);

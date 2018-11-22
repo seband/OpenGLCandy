@@ -9,12 +9,13 @@ in vec3 in_Bitangent;
 uniform mat4 modelView;
 uniform mat4 projection;
 uniform vec3 lightPosition;
+uniform mat4 cameraMatrix;
 out vec3 out_exColor;
 out vec2 out_TexCoord;
 out vec3 out_light_pos;
 void main(void) {
 
-    out_light_pos = (projection * modelView * vec4(lightPosition, 1.0f)).xyz;
+    out_light_pos = (projection * cameraMatrix* modelView * vec4(lightPosition, 1.0f)).xyz;
     //Passthrough texcoords
     out_TexCoord=in_TexCoord;
 
