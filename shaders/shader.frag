@@ -34,11 +34,11 @@ void main(void) {
     vec3 diffuse = diff * tex;
 
     //Specular light
-    float shininess = 128.0f;
+    float shininess = 16.0f;
 	vec3 viewDir = normalize(-surf.xyz);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0f), shininess);
-    vec3 specular = vec3(1.0f) * spec;
+    vec3 specular = vec3(0.3f) * spec;
 
     //Sum of calculated light
     out_Color = vec4(ambient + diffuse + specular, 1.0);
