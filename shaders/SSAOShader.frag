@@ -5,6 +5,7 @@ in vec2 out_TexCoord;
 
 uniform sampler2D depthMap;
 uniform sampler2D texUnit;
+uniform bool renderSSAO;
 
 float calculateDepth(in float d, in float d1, in float d2){
   const float a = 15.0; // Difference that gives max occlusion
@@ -45,4 +46,6 @@ void main(void){
         weight = 0.5f*(1/samples);
    }
    out_Color = texture(texUnit, out_TexCoord)-0.3f*vec4(vec3(ao),1.0f);
+   if(!renderSSAO)
+    out_Color = texture(texUnit, out_TexCoord);
 }

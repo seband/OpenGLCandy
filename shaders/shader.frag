@@ -15,6 +15,8 @@ uniform mat4 cameraMatrix;
 uniform vec3 lightPosition;
 uniform mat4 modelView;
 uniform int isLit;
+uniform bool renderLight;
+uniform bool renderShadows;
 
 vec2 poissonDisk[4] = vec2[](
   vec2( -0.94201624, -0.39906216 ),
@@ -72,16 +74,19 @@ void main(void) {
     */
 
     //Stratified sampling
-    for (int i=0;i<4;i++){
-        int index = int(rand(gl_FragCoord.xy * i)*4);
-          if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[index]/700.0 ).z + bias <  adjustedShadowCoords.z )
-            shade-=0.1;
+    if(renderShadows){
+        for (int i=0;i<4;i++){
+            int index = int(rand(gl_FragCoord.xy * i)*4);
+              if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[index]/700.0 ).z + bias <  adjustedShadowCoords.z )
+                shade-=0.1;
+        }
     }
 
 
     out_Color = vec4(shade*(ambient + diffuse + specular), 1.0);
-
-    //out_Color = vec4(1,1,1,1);
+    if(!renderLight){
+        out_Color = vec4(1,1,1,1);
+    }
     if(isLit == 1){
         out_Color = vec4(0,0,0,0);
     }

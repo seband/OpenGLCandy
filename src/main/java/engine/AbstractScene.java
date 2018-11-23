@@ -20,9 +20,11 @@ public abstract class AbstractScene implements Drawable{
     }
 
     public void draw(float deltaT){
-        camera.update(deltaT);
-        gameObjectList.forEach(gc -> gc.update());
+        this.update();
+        this.camera.update(deltaT);
+        this.gameObjectList.forEach(gc -> gc.update());
         this.render();
     }
     public abstract void render();
+    protected void update(){}
 }

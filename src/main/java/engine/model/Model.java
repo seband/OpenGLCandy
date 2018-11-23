@@ -1,6 +1,7 @@
 package engine.model;
 
 import engine.Camera;
+import engine.RenderSettings;
 import engine.Sun;
 import engine.Transform;
 import org.joml.Matrix4f;
@@ -92,6 +93,11 @@ public class Model {
         utils.BufferUtils.setUniform(program,"shadowMatrix", Sun.sun.shadowMatrix);
         utils.BufferUtils.setUniform(program,"cameraMatrix", camera.getViewMatrix());
         utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
+        utils.BufferUtils.setUniform(program,"renderLight", RenderSettings.getSetting(RenderSettings.RenderSetting.LIGHT));
+        utils.BufferUtils.setUniform(program,"renderShadows", RenderSettings.getSetting(RenderSettings.RenderSetting.SHADOWS));
+        utils.BufferUtils.setUniform(program,"renderSSAO", RenderSettings.getSetting(RenderSettings.RenderSetting.SSAO));
+        utils.BufferUtils.setUniform(program,"renderShadows", RenderSettings.getSetting(RenderSettings.RenderSetting.SHADOWS));
+        utils.BufferUtils.setUniform(program,"renderGodrays", RenderSettings.getSetting(RenderSettings.RenderSetting.GODRAYS));
         utils.BufferUtils.setUniform(program, "isLit", material.lit);
         utils.BufferUtils.setUniform(program, "lightPosition", Sun.sun.gc.transform.position);
         if(textureCoords.length>0 && texture != null){

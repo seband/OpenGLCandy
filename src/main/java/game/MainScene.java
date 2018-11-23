@@ -170,16 +170,14 @@ public class MainScene extends AbstractScene {
                         model.setNormalMap(tree5Normal);
                         break;
                     case 19:
-                    case 20:
+                    case 20: //WATER
                         model.setTexture(backgroundTree);
                         model.setNormalMap(backgroundTreeNormal);
                         break;
 
                 }
-                //model.setNormalMap(TextureLoader.loadTexture(new File("textures/mini_normal.tga")));
                 model.setLit(false);
                 GameObject gc = new StaticGameObject(model);
-                //gc.transform.position = new Vector3f(0,1,2);
                 gc.transform.scale = new Vector3f(0.05f,0.05f,0.05f);
 
                 addGameObject(gc);
@@ -190,6 +188,17 @@ public class MainScene extends AbstractScene {
         }
     }
 
+    @Override
+    protected void update(){
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_1))
+            RenderSettings.setSetting(RenderSettings.RenderSetting.LIGHT, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_2))
+            RenderSettings.setSetting(RenderSettings.RenderSetting.SSAO, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_3))
+            RenderSettings.setSetting(RenderSettings.RenderSetting.SHADOWS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_4))
+            RenderSettings.setSetting(RenderSettings.RenderSetting.GODRAYS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+    }
     private Matrix4f viewMatrixCache;
     private Matrix4f projectionMatrixCache;
     private Vector3f cameraPostitionCache;
