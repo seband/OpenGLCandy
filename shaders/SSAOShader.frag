@@ -7,11 +7,11 @@ uniform sampler2D depthMap;
 uniform sampler2D texUnit;
 
 float calculateDepth(in float d, in float d1, in float d2){
-  const float a = 20.0; // Difference that gives max occlusion
+  const float a = 15.0; // Difference that gives max occlusion
   float dav = (d1+d2)/2.0;
   float x = d - dav;
   float dao = max( 1.0/a/a*x*(2.0*a - x), 0.0);
-  dao = dao*max(3.0f-x, 0.0);
+  dao = dao*max(3.5f-x, 0.0);
   return dao;
 }
 
@@ -42,7 +42,7 @@ void main(void){
         ao += weight * calculateDepth(d, d1, d2);
         dx += 1.0f/800.0f;
         dy += 1.0f/800.0f;
-        weight = 0.2f*(1-i/samples);
+        weight = 0.5f*(1/samples);
    }
    out_Color = texture(texUnit, out_TexCoord)-0.3f*vec4(vec3(ao),1.0f);
 }

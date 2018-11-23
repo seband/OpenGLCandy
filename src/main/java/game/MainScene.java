@@ -75,7 +75,7 @@ public class MainScene extends AbstractScene {
                     this.transform.position = this.transform.position.rotateY(0.005f);
                 }
             };
-        sunGC.transform.position = new Vector3f(0,40,40);
+        sunGC.transform.position = new Vector3f(0,45,35);
         sunGC.transform.scale = new Vector3f(3);
         addGameObject(sunGC);
         noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());

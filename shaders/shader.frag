@@ -41,7 +41,6 @@ void main(void) {
 
     //Texture sampling
     vec3 tex = texture(texUnit, out_TexCoord).rgb;
-
     //Calculate normal from normalmap with tangent and bitangent
     vec3 normal = texture(normalMap, out_TexCoord).rgb;
     normal = normalize(normal * 2 - 1);
@@ -82,6 +81,7 @@ void main(void) {
 
     out_Color = vec4(shade*(ambient + diffuse + specular), 1.0);
 
+    //out_Color = vec4(1,1,1,1);
     if(isLit == 1){
         out_Color = vec4(0,0,0,0);
     }
