@@ -19,6 +19,9 @@ public abstract class ObjectScene extends AbstractScene {
 
     protected abstract void initScene();
 
+    /**
+     * Draws the game objects in the game object list
+     */
     public void draw(){
         for(GameObject go: this.gameObjectList)
             go.draw(mainProgram, this.camera);

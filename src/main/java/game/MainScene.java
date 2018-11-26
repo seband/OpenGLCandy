@@ -85,6 +85,10 @@ public class MainScene extends AbstractScene {
         System.out.println("Ready");
     }
 
+    /**
+     * Loads cartoon scene (Manual setup)
+     * @throws TextureLoader.TextureLoadException
+     */
     private void loadCartoonScene() throws TextureLoader.TextureLoadException {
         System.out.println("Loading Textures...");
         Texture tree1 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_01.png"));

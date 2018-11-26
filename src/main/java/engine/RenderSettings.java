@@ -8,6 +8,9 @@ import java.util.Map;
  */
 public class RenderSettings {
 
+    /**
+     * Settings used for turning on and off renderings
+     */
     public enum RenderSetting{
         LIGHT,
         SSAO,
@@ -32,6 +35,11 @@ public class RenderSettings {
         return settings.get(setting);
     }
 
+    /**
+     * Update status of setting
+     * @param setting to update
+     * @param value new value of the setting
+     */
     public static void setSetting(RenderSetting setting, boolean value){
         settings.replace(setting, value);
     }
