@@ -1,25 +1,17 @@
 package utils;
 
 import engine.model.DepthTexture;
-import engine.model.Face;
 import engine.model.Texture;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryStack;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 
 
 public class BufferUtils {

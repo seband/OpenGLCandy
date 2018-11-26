@@ -1,6 +1,10 @@
 package engine.model;
 
 public class SquareModel extends Model{
+    /**
+     * Simple square model (used for FBO rendering)
+     * @param program used for generating buffers
+     */
     public SquareModel(int program){
         super();
         this.vertices = new float[]{

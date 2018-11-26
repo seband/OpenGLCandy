@@ -23,6 +23,11 @@ public class RenderSettings {
         settings.put(RenderSetting.GODRAYS, true);
     }
 
+    /**
+     * Get render setting
+     * @param setting to retrieve
+     * @return value of setting
+     */
     public static boolean getSetting(RenderSetting setting){
         return settings.get(setting);
     }

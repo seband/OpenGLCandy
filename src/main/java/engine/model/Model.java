@@ -19,18 +19,27 @@ import java.util.ArrayList;
 public class Model {
     int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE, VBO_TANGENT, VBO_BITANGENT;
 
-   protected float[] vertices;
+    float[] vertices;
+    float[] textureCoords;
+    int[] indicies;
     private float[] normals;
-    protected float[] textureCoords;
     private float[] tangents;
     private float[] bitangents;
-   protected int[] indicies;
 
 
     private Texture texture, normalMap, fxMap;
     private DepthTexture depthTexture;
     private Material material = new Material(1,1,1,1, true);
 
+    /**
+     * Acts as a wrapper for mesh data
+     * @param vertices vertices describing the mesh
+     * @param normals normal vectors for the mesh
+     * @param textureCoords texture coordinates for the mesh
+     * @param tangents for tangent-space manipulations
+     * @param bitangents for tangent-space manipulations
+     * @param indicies describes the order of vertices, normal and texture coordinates
+     */
     public Model(float[] vertices, float[] normals, float[] textureCoords, float[] tangents, float[] bitangents, int[] indicies){
         this.vertices = vertices;
         this.normals = normals;
@@ -40,47 +49,99 @@ public class Model {
         this.bitangents = bitangents;
     }
 
-    public Model(){
+    /**
+     * Empty model
+     */
+    Model(){
 
     }
 
+    /**
+     * Sets diffuse map
+     * @param texture containing diffuse map
+     */
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
+
+    /**
+     * Sets normal map
+     * @param texture containing normal map
+     */
     public void setNormalMap(Texture texture) {
         this.normalMap = texture;
     }
+
+    /**
+     * Sets if the material reacts to light
+     * @param lit
+     */
     public void setLit(boolean lit){
         this.material.lit = lit;
     }
 
+    /**
+     * Set secondary map that can be used for shading effects
+     * @param fxMap map containing fx-data
+     */
     public void setFxMap(Texture fxMap) {
         this.fxMap = fxMap;
     }
 
+    /**
+     * Does the material react to light
+     * @return boolean describing the light reaction
+     */
     public boolean getLit(){
         return this.material.lit;
     }
+
+    /**
+     * Set depth texture that is used for e.g. shadow-mapping
+     * @param depthTexture containing depth data
+     */
     public void setDepthTexture(DepthTexture depthTexture) {
         this.depthTexture = depthTexture;
     }
 
+    /**
+     * Get diffuse texture
+     * @return diffuse texture
+     */
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Get identifier for diffuse texture
+     * @return texture identifier
+     */
     public int getTextureId(){
         return texture.getId();
     }
 
+    /**
+     * Set material for model
+     * @param material new material
+     */
     public void setMaterial(Material material) {
         this.material = material;
     }
 
+    /**
+     * Get current material
+     * @return current material
+     */
     public Material getMaterial() {
         return material;
     }
 
+    /**
+     * Draw the model on screen
+     * @param program shader program to use
+     * @param camera to visualize the model
+     * @param transform position and rotation of parent game object
+     */
     public void draw(int program, Camera camera, Transform transform) {
         GL20.glUseProgram(program);
         GL30.glBindVertexArray(VAO);
@@ -123,7 +184,10 @@ public class Model {
         GL20.glUseProgram(0);
     }
 
-
+    /**
+     * Generate buffers based on provided data
+     * @param program used for reference
+     */
     public void GenerateBuffers(int program) {
         FloatBuffer verticesBuffer = utils.BufferUtils.getFloatBuffer(vertices);
         FloatBuffer normalBuffer = null;

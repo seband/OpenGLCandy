@@ -5,11 +5,19 @@ import org.lwjgl.opengl.GL20;
 import java.nio.ByteBuffer;
 
 public class DepthTexture extends Texture{
+    /**
+     * Texture that holds depth-data
+     * @param width
+     * @param height
+     */
     public DepthTexture(int width, int height) {
         super(width, height);
         setupTexture();
     }
 
+    /**
+     * Setup texture
+     */
     @Override
     protected void setupTexture(){
         this.id = generateTexture();

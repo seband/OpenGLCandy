@@ -27,16 +27,29 @@ public class Texture {
         setupTexture(data);
     }
 
+    /**
+     * Texture
+     * @param width of texture
+     * @param height of texture
+     */
     public Texture(int width, int height) {
         this.width = width;
         this.height = height;
         setupTexture();
     }
 
+    /**
+     * Get current height
+     * @return current height
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Get current weight
+     * @return current weight
+     */
     public int getWidth() {
         return width;
     }
@@ -45,7 +58,7 @@ public class Texture {
      * Generate a new texture
      * @return the new texture's id
      */
-    protected int generateTexture(){
+    int generateTexture(){
         return GL20.glGenTextures();
     }
 
@@ -54,7 +67,7 @@ public class Texture {
      * @param parameter
      * @param value
      */
-    protected void setParameter(int parameter, int value){
+    void setParameter(int parameter, int value){
         GL20.glTexParameteri(GL20.GL_TEXTURE_2D, parameter, value);
     }
 
@@ -67,6 +80,9 @@ public class Texture {
         GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA8, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, data);
     }
 
+    /**
+     * Setup the texture
+     */
     protected void setupTexture(){
         this.id = generateTexture();
         bindTexure();
@@ -86,7 +102,13 @@ public class Texture {
         return id;
     }
 
-    public void setLocation(int program, String location, int texUnit){
+    /**
+     * Set location in shader program
+     * @param program shader program used
+     * @param location to upload to
+     * @param texUnit to use
+     */
+    void setLocation(int program, String location, int texUnit){
         glActiveTexture(GL_TEXTURE0 + texUnit);
         bindTexure();
         glUniform1i(GL20.glGetUniformLocation(program, location), texUnit);
@@ -94,7 +116,7 @@ public class Texture {
     /**
      * Bind the texture
      */
-    public void bindTexure(){
+    void bindTexure(){
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, id);
     }
 
