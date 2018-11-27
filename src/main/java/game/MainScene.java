@@ -24,12 +24,15 @@ import java.util.stream.Collectors;
  */
 public class MainScene extends AbstractScene {
     int mainProgram, textureProgram, radialBlurProgram, depthTextureProgram, noLightProgram, SSAOProgram;
-    FBORenderer sceneRenderer, noLightRenderer,godRayRenderer, SSAORenderer;
+    FBORenderer noLightRenderer,godRayRenderer, SSAORenderer;
+    FBOSkyboxSceneRenderer sceneRenderer;
     TextureRenderer textureRenderer;
     FBODepthRenderer depthTextureRenderer;
-    GameObject square;
+    GameObject square, skybox;
     ArrayList<GameObject> fxObjectList = new ArrayList<>();
-    List<GameObject> noSunObjectList= new ArrayList<>();
+    List<GameObject> noSunObjectList = new ArrayList<>();
+    List<GameObject> skyBoxList = new ArrayList<>();
+
 
     public MainScene(Camera camera, int width, int height) {
         super(camera);
@@ -43,7 +46,7 @@ public class MainScene extends AbstractScene {
         }catch (Exception e){
             System.out.println("Program creation failed");
         }
-        sceneRenderer = new FBOSceneRenderer(mainProgram, width, height);
+        sceneRenderer = new FBOSkyboxSceneRenderer(mainProgram, width, height);
         noLightRenderer = new FBONoLightRenderer(noLightProgram, width, height);
         godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, width, height);
         depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, width, height);
@@ -53,6 +56,8 @@ public class MainScene extends AbstractScene {
         square  = new StaticGameObject(new SquareModel(textureProgram));
         square.transform.position = new Vector3f(0,0,-2);
         fxObjectList.add(square);
+
+
         initScene();
     }
 
@@ -69,7 +74,6 @@ public class MainScene extends AbstractScene {
 
         Model sun = ModelLoader.loadModel(mainProgram, new File("models/sun.obj"));
         GameObject sunGC = new GameObject(sun) {
-                boolean right=true;
                 @Override
                 public void update() {
                     this.transform.position = this.transform.position.rotateY(0.005f);
@@ -82,6 +86,18 @@ public class MainScene extends AbstractScene {
 
         new Sun(sunGC);
         this.camera.setPosition(new Vector3f(0,0,0));
+
+        skybox = new GameObject(utils.ModelLoader.loadModel(mainProgram, new File("models/skybox_normals.obj"))) {
+            @Override
+            public void update() {
+                skybox.transform.position = camera.getPosition();
+            }
+        };
+        try {
+            skybox.setTexture(TextureLoader.loadTexture(new File("textures/skybox_1.png")));
+        }catch (Exception e){}
+        skybox.transform.scale = new Vector3f(3);
+        skyBoxList.add(skybox);
         System.out.println("Ready");
     }
 
@@ -202,6 +218,7 @@ public class MainScene extends AbstractScene {
             RenderSettings.setSetting(RenderSettings.RenderSetting.SHADOWS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
         if(InputHandler.keyDown(GLFW.GLFW_KEY_4))
             RenderSettings.setSetting(RenderSettings.RenderSetting.GODRAYS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        skybox.update();
     }
     private Matrix4f viewMatrixCache;
     private Matrix4f projectionMatrixCache;
@@ -224,7 +241,7 @@ public class MainScene extends AbstractScene {
         camera.setViewMatrix(viewMatrixCache);
 
         camera.setProjectionMatrix(projectionMatrixCache);
-        sceneRenderer.draw(noSunObjectList, camera);
+        sceneRenderer.drawWithSkyBox(skybox, noSunObjectList, camera);
 
         //-------[GOD RAY]-------
         noLightRenderer.draw(gameObjectList, camera);

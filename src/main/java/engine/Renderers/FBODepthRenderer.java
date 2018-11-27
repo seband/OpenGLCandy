@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class FBODepthRenderer extends FBORenderer{
 
-    
+
     public FBODepthRenderer(int program, int width, int height){
         super(program, width, height);
         tex = new DepthTexture(width, height);

@@ -38,6 +38,10 @@ float readDepth( in vec2 coord )
 }
 
 void main(void) {
+    if(isLit == 1){
+        out_Color = vec4(texture(texUnit, out_TexCoord).rgb, 1);
+        return;
+    }
     //Light vectors
     vec3 lightDir   = normalize(vec3(cameraMatrix*vec4(lightPosition,1.0)) - surf);
 
@@ -87,8 +91,6 @@ void main(void) {
     if(!renderLight){
         out_Color = vec4(1,1,1,1);
     }
-    if(isLit == 1){
-        out_Color = vec4(0,0,0,0);
-    }
+
 }
 

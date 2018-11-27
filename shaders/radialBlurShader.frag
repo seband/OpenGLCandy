@@ -40,6 +40,7 @@ void main(void) {
         return;
     }
 
+    //"Radial blur" by texture sampling
     for(int i=0; i < NUM_SAMPLES ; i++)
     {
         tc -= deltaTexCoord;
