@@ -10,12 +10,14 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL20;
+import org.w3c.dom.Text;
 import utils.ModelLoader;
 import utils.TextureLoader;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -32,7 +34,7 @@ public class MainScene extends AbstractScene {
     ArrayList<GameObject> fxObjectList = new ArrayList<>();
     List<GameObject> noSunObjectList = new ArrayList<>();
     List<GameObject> skyBoxList = new ArrayList<>();
-
+    Texture brightSky, darkSky;
 
     public MainScene(Camera camera, int width, int height) {
         super(camera);
@@ -66,7 +68,7 @@ public class MainScene extends AbstractScene {
      */
     protected void initScene() {
         try {
-            loadCartoonScene();
+            loadHagridScene();
 
         } catch (TextureLoader.TextureLoadException e) {
             e.printStackTrace();
@@ -79,7 +81,7 @@ public class MainScene extends AbstractScene {
                     this.transform.position = this.transform.position.rotateY(0.005f);
                 }
             };
-        sunGC.transform.position = new Vector3f(0,30,30);
+        sunGC.transform.position = new Vector3f(0,20,30);
         sunGC.transform.scale = new Vector3f(3);
         addGameObject(sunGC);
         noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());
@@ -94,7 +96,9 @@ public class MainScene extends AbstractScene {
             }
         };
         try {
-            skybox.setTexture(TextureLoader.loadTexture(new File("textures/skybox_1.png")));
+            brightSky = TextureLoader.loadTexture(new File("textures/Daylight Box UV.png"));
+            darkSky = TextureLoader.loadTexture(new File("textures/skybox_1.png"));
+            skybox.setTexture(brightSky);
         }catch (Exception e){}
         skybox.transform.scale = new Vector3f(3);
         skyBoxList.add(skybox);
@@ -207,6 +211,129 @@ public class MainScene extends AbstractScene {
             }
         }
     }
+    /**
+     * Loads cartoon scene (Manual setup)
+     * @throws TextureLoader.TextureLoadException
+     */
+    private void loadHagridScene() throws TextureLoader.TextureLoadException {
+        System.out.println("Loading Textures...");
+        Map<String, Texture> textures = new HashMap<>();
+        Map<String, Texture> normalmaps = new HashMap<>();
+
+        textures.put("Alumox.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Alumox.jpg")));
+        textures.put("ban.png", TextureLoader.loadTexture(new File("textures/hagrid/ban.png")));
+        textures.put("Bellows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Bellows.jpg")));
+        textures.put("BepLua.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BepLua.jpg")));
+        textures.put("BigHut.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BigHut.jpg")));
+        textures.put("BigWindows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BigWindows.jpg")));
+        textures.put("BiNgo.png", TextureLoader.loadTexture(new File("textures/hagrid/BiNgo.png")));
+        textures.put("CaiAm.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiAm.jpg")));
+        textures.put("CaiChoc.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiChoc.jpg")));
+        textures.put("CaiQue.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiQue.jpg")));
+        textures.put("CaiVac.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiVac.jpg")));
+        textures.put("CaiXaBeng.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiXaBeng.jpg")));
+        textures.put("CaiXoong.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiXoong.jpg")));
+        textures.put("Da.png", TextureLoader.loadTexture(new File("textures/hagrid/Da.png")));
+        textures.put("DayThung.jpg", TextureLoader.loadTexture(new File("textures/hagrid/DayThung.jpg")));
+        textures.put("Den.png", TextureLoader.loadTexture(new File("textures/hagrid/Den.png")));
+        textures.put("Door2.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Door2.jpg")));
+        textures.put("Door.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Door.jpg")));
+        textures.put("DSC01897.jpg", TextureLoader.loadTexture(new File("textures/hagrid/DSC01897.jpg")));
+        textures.put("ghe.png", TextureLoader.loadTexture(new File("textures/hagrid/ghe.png")));
+        textures.put("GioLan.png", TextureLoader.loadTexture(new File("textures/hagrid/GioLan.png")));
+        textures.put("GioMay.png", TextureLoader.loadTexture(new File("textures/hagrid/GioMay.png")));
+        textures.put("Ground.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Ground.jpg")));
+        textures.put("hop_do.jpg", TextureLoader.loadTexture(new File("textures/hagrid/hop_do.jpg")));
+        textures.put("HopGo.jpg", TextureLoader.loadTexture(new File("textures/hagrid/HopGo.jpg")));
+        textures.put("Hop_nhieu_ngan.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Hop_nhieu_ngan.jpg")));
+        textures.put("indt52L.jpg", TextureLoader.loadTexture(new File("textures/hagrid/indt52L.jpg")));
+        textures.put("Long_dung_nam.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Long_dung_nam.jpg")));
+        textures.put("Lon.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Lon.jpg")));
+        textures.put("Muoi.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Muoi.jpg")));
+        textures.put("RockSmooth0031_1_M.jpg", TextureLoader.loadTexture(new File("textures/hagrid/RockSmooth0031_1_M.jpg")));
+        textures.put("rockwall.jpg", TextureLoader.loadTexture(new File("textures/hagrid/rockwall.jpg")));
+        textures.put("SB046.JPG", TextureLoader.loadTexture(new File("textures/hagrid/SB046.JPG")));
+        textures.put("SmallHut.jpg", TextureLoader.loadTexture(new File("textures/hagrid/SmallHut.jpg")));
+        textures.put("SmallWindows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/SmallWindows.jpg")));
+        textures.put("So_pha.jpg", TextureLoader.loadTexture(new File("textures/hagrid/So_pha.jpg")));
+        textures.put("Tham.png", TextureLoader.loadTexture(new File("textures/hagrid/Tham.png")));
+        textures.put("ThungGoTron.png", TextureLoader.loadTexture(new File("textures/hagrid/ThungGoTron.png")));
+        textures.put("ThungGoVuong.png", TextureLoader.loadTexture(new File("textures/hagrid/ThungGoVuong.png")));
+        textures.put("Trung_Nen.png", TextureLoader.loadTexture(new File("textures/hagrid/Trung_Nen.png")));
+        textures.put("Vali.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Vali.jpg")));
+        textures.put("XeKutKit.png", TextureLoader.loadTexture(new File("textures/hagrid/XeKutKit.png")));
+        textures.put("Xeng.png", TextureLoader.loadTexture(new File("textures/hagrid/Xeng.png")));
+        normalmaps.put("Alumox.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Alumox_normal.jpg")));
+        normalmaps.put("ban.png", TextureLoader.loadTexture(new File("textures/hagrid/ban_normal.png")));
+        normalmaps.put("Bellows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Bellows_normal.jpg")));
+        normalmaps.put("BepLua.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BepLua_normal.jpg")));
+        normalmaps.put("BigHut.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BigHut_normal.jpg")));
+        normalmaps.put("BigWindows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BigWindows_normal.jpg")));
+        normalmaps.put("BiNgo.png", TextureLoader.loadTexture(new File("textures/hagrid/BiNgo_normal.png")));
+        normalmaps.put("CaiAm.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiAm_normal.jpg")));
+        normalmaps.put("CaiChoc.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiChoc_normal.jpg")));
+        normalmaps.put("CaiQue.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiQue_normal.jpg")));
+        normalmaps.put("CaiVac.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiVac_normal.jpg")));
+        normalmaps.put("CaiXaBeng.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiXaBeng_normal.jpg")));
+        normalmaps.put("CaiXoong.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiXoong_normal.jpg")));
+        normalmaps.put("Da.png", TextureLoader.loadTexture(new File("textures/hagrid/Da_normal.png")));
+        normalmaps.put("DayThung.jpg", TextureLoader.loadTexture(new File("textures/hagrid/DayThung_normal.jpg")));
+        normalmaps.put("Den.png", TextureLoader.loadTexture(new File("textures/hagrid/Den_normal.png")));
+        normalmaps.put("Door2.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Door2_normal.jpg")));
+        normalmaps.put("Door.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Door_normal.jpg")));
+        normalmaps.put("DSC01897.jpg", TextureLoader.loadTexture(new File("textures/hagrid/DSC01897_normal.jpg")));
+        normalmaps.put("ghe.png", TextureLoader.loadTexture(new File("textures/hagrid/ghe_normal.png")));
+        normalmaps.put("GioLan.png", TextureLoader.loadTexture(new File("textures/hagrid/GioLan_normal.png")));
+        normalmaps.put("GioMay.png", TextureLoader.loadTexture(new File("textures/hagrid/GioMay_normal.png")));
+        normalmaps.put("Ground.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Ground_normal.jpg")));
+        normalmaps.put("hop_do.jpg", TextureLoader.loadTexture(new File("textures/hagrid/hop_do_normal.jpg")));
+        normalmaps.put("HopGo.jpg", TextureLoader.loadTexture(new File("textures/hagrid/HopGo_normal.jpg")));
+        normalmaps.put("Hop_nhieu_ngan.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Hop_nhieu_ngan_normal.jpg")));
+        normalmaps.put("indt52L.jpg", TextureLoader.loadTexture(new File("textures/hagrid/indt52L_normal.jpg")));
+        normalmaps.put("Long_dung_nam.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Long_dung_nam_normal.jpg")));
+        normalmaps.put("Lon.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Lon_normal.jpg")));
+        normalmaps.put("Muoi.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Muoi_normal.jpg")));
+        normalmaps.put("RockSmooth0031_1_M.jpg", TextureLoader.loadTexture(new File("textures/hagrid/RockSmooth0031_1_M_normal.jpg")));
+        normalmaps.put("rockwall.jpg", TextureLoader.loadTexture(new File("textures/hagrid/rockwall_normal.jpg")));
+        normalmaps.put("SB046.JPG", TextureLoader.loadTexture(new File("textures/hagrid/SB046_normal.JPG")));
+        normalmaps.put("SmallHut.jpg", TextureLoader.loadTexture(new File("textures/hagrid/SmallHut_normal.jpg")));
+        normalmaps.put("SmallWindows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/SmallWindows_normal.jpg")));
+        normalmaps.put("So_pha.jpg", TextureLoader.loadTexture(new File("textures/hagrid/So_pha_normal.jpg")));
+        normalmaps.put("Tham.png", TextureLoader.loadTexture(new File("textures/hagrid/Tham_normal.png")));
+        normalmaps.put("ThungGoTron.png", TextureLoader.loadTexture(new File("textures/hagrid/ThungGoTron_normal.png")));
+        normalmaps.put("ThungGoVuong.png", TextureLoader.loadTexture(new File("textures/hagrid/ThungGoVuong_normal.png")));
+        normalmaps.put("Trung_Nen.png", TextureLoader.loadTexture(new File("textures/hagrid/Trung_Nen_normal.png")));
+        normalmaps.put("Vali.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Vali_normal.jpg")));
+        normalmaps.put("XeKutKit.png", TextureLoader.loadTexture(new File("textures/hagrid/XeKutKit_normal.png")));
+        normalmaps.put("Xeng.png", TextureLoader.loadTexture(new File("textures/hagrid/Xeng_normal.png")));
+
+
+        for(Model model : ModelLoader.loadModels(mainProgram, new File("models/hagrid_named.obj"))){
+
+            try {
+                String pattern = "\\.[a-z]{3}(.*)";
+                Pattern r = Pattern.compile(pattern);
+                Matcher m = r.matcher(model.name);
+                StringBuffer sb = new StringBuffer();
+                while (m.find()) {
+                    m.appendReplacement(sb, m.group(0).replaceFirst(Pattern.quote(m.group(1)), ""));
+                }
+                m.appendTail(sb); // append the rest of the contents
+                System.out.println(sb.toString());
+                model.setTexture(textures.get(sb.toString()));
+                model.setNormalMap(normalmaps.get(sb.toString()));
+
+                model.setLit(false);
+                GameObject gc = new StaticGameObject(model);
+                gc.transform.scale = new Vector3f(0.04f,0.04f,0.04f);
+
+                addGameObject(gc);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     protected void update(){
@@ -218,6 +345,10 @@ public class MainScene extends AbstractScene {
             RenderSettings.setSetting(RenderSettings.RenderSetting.SHADOWS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
         if(InputHandler.keyDown(GLFW.GLFW_KEY_4))
             RenderSettings.setSetting(RenderSettings.RenderSetting.GODRAYS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F1))
+            skybox.setTexture(brightSky);
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F2))
+            skybox.setTexture(darkSky);
         skybox.update();
     }
     private Matrix4f viewMatrixCache;

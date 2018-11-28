@@ -85,6 +85,7 @@ public class ModelLoader {
             }
 
             Model m = new Model(vertices, normals, textureCoords, tangents, bitangents, indices);
+            m.name = mesh.mName().dataString();
             m.GenerateBuffers(program);
             models.add(m);
         }

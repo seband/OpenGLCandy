@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class Model {
     int VAO, VBO_VERTEX,VBO_INDEX, VBO_NORMAL,VBO_TEXTURE, VBO_TANGENT, VBO_BITANGENT;
-
+    public String name = "";
     float[] vertices;
     float[] textureCoords;
     int[] indicies;
