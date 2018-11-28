@@ -24,6 +24,7 @@ public class FBOSceneRenderer extends FBORenderer{
         glClearColor(0.5f, 0.5f, 1.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
     }
 
     @Override

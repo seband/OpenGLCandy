@@ -141,13 +141,14 @@ public class Camera {
      * @return orthographic projection matrix
      */
     public Matrix4f getOrtho(){
-
-        float height = (float)Math.tan((double)fov / 2.0) * (far + near) / 4.0f;
+        float tempNear = 20.0f;
+        float tempFar = 80.0f;
+        float height = (float)Math.tan((double)fov / 2.0) * (tempFar + tempNear) / 4.0f;
         float left = -height * aspectRatio;
         float right = height * aspectRatio;
         float bottom = -height;
         float top = height;
-        return new Matrix4f().ortho(left,right,bottom,top,near,far);
+        return new Matrix4f().ortho(left,right,bottom,top,tempNear,tempFar);
     }
 
     /**

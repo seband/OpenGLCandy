@@ -15,7 +15,9 @@ public abstract class Renderer {
     public void draw(List<GameObject> gc, Camera camera){
         beforeDraw();
         gc.forEach(o ->{render(o, camera);});
+        afterDraw();
     }
     protected abstract void render(GameObject gc, Camera camera);
     protected abstract void beforeDraw();
+    protected void afterDraw(){}
 }

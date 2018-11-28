@@ -41,7 +41,7 @@ public class MainScene extends AbstractScene {
             noLightProgram = utils.Program.createProgram("shaders/noLightShader.vert", "shaders/noLightShader.frag");
             textureProgram = utils.Program.createProgram("shaders/textureShader.vert", "shaders/textureShader.frag");
             radialBlurProgram = utils.Program.createProgram("shaders/radialBlurShader.vert", "shaders/radialBlurShader.frag");
-            depthTextureProgram = utils.Program.createProgram("shaders/shader.vert", "shaders/shader.frag");
+            depthTextureProgram = utils.Program.createProgram("shaders/depthShader.vert", "shaders/depthShader.frag");
             SSAOProgram = utils.Program.createProgram("shaders/SSAOShader.vert", "shaders/SSAOShader.frag");
         }catch (Exception e){
             System.out.println("Program creation failed");
@@ -49,7 +49,7 @@ public class MainScene extends AbstractScene {
         sceneRenderer = new FBOSkyboxSceneRenderer(mainProgram, width, height);
         noLightRenderer = new FBONoLightRenderer(noLightProgram, width, height);
         godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, width, height);
-        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, width, height);
+        depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 2048, 2048);
         SSAORenderer = new FBOSSAORenderer(SSAOProgram, width, height);
         textureRenderer = new TextureRenderer(textureProgram);
 
@@ -79,7 +79,7 @@ public class MainScene extends AbstractScene {
                     this.transform.position = this.transform.position.rotateY(0.005f);
                 }
             };
-        sunGC.transform.position = new Vector3f(0,45,35);
+        sunGC.transform.position = new Vector3f(0,30,30);
         sunGC.transform.scale = new Vector3f(3);
         addGameObject(sunGC);
         noSunObjectList = gameObjectList.stream().filter(gc -> gc != sunGC).collect(Collectors.toList());
@@ -198,7 +198,7 @@ public class MainScene extends AbstractScene {
                 }
                 model.setLit(false);
                 GameObject gc = new StaticGameObject(model);
-                gc.transform.scale = new Vector3f(0.05f,0.05f,0.05f);
+                gc.transform.scale = new Vector3f(0.04f,0.04f,0.04f);
 
                 addGameObject(gc);
                 i++;

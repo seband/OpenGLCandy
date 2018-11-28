@@ -29,8 +29,8 @@ float rand(vec2 co){
 }
 float readDepth( in vec2 coord )
 {
-    float zNear = 0.1f;
-    float zFar = 100.0f;
+    float zNear = 20.0f;
+    float zFar = 80.0f;
     float z_from_depth_texture = texture(depthMap, coord).x;
     float z_sb = 2.0 * z_from_depth_texture - 1.0; // scale and bias from texture to normalized coords
     float z_world = 2.0 * zNear * zFar / (zFar + zNear - z_sb * (zFar - zNear)); // Get back to real Z
@@ -38,6 +38,7 @@ float readDepth( in vec2 coord )
 }
 
 void main(void) {
+    vec2 texelSize = 1.0 / textureSize(depthMap, 0);
     if(isLit == 1){
         out_Color = vec4(texture(texUnit, out_TexCoord).rgb, 1);
         return;
@@ -68,26 +69,28 @@ void main(void) {
 
     vec3 adjustedShadowCoords = (shadowCoord.xyz / shadowCoord.w) * 0.5 + 0.5;
     float shade = 1.0;
-    float bias = 0.005f;
-    /* Simple sampling
-        for (int i=0;i<4;i++){
-          if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[i]/700.0 ).z + 0.005f <  adjustedShadowCoords.z ){
+    float bias = 0.0008f;
+     //Simple sampling
+      /*  for (int i=0;i<4;i++){
+          if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[i]/700.0 ).z + 0.0005f <  adjustedShadowCoords.z ){
             shade-=0.2;
           }
         }
-    */
+*/
 
     //Stratified sampling
     if(renderShadows){
         for (int i=0;i<4;i++){
             int index = int(rand(gl_FragCoord.xy * i)*4);
-              if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[index]/700.0 ).z + bias <  adjustedShadowCoords.z )
-                shade-=0.1;
+              if ( texture( depthMap, adjustedShadowCoords.xy + texelSize*poissonDisk[index] ).z + bias < adjustedShadowCoords.z )
+                shade-=0.2 ;
         }
+        if(adjustedShadowCoords.z > 1.0)
+            shade = 1.0;
     }
 
 
-    out_Color = vec4(shade*(ambient + diffuse + specular), 1.0);
+    out_Color = vec4(ambient + shade*(diffuse + specular), 1.0);
     if(!renderLight){
         out_Color = vec4(1,1,1,1);
     }

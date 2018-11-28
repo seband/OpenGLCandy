@@ -18,8 +18,8 @@ float calculateDepth(in float d, in float d1, in float d2){
 
 float readDepth( in vec2 coord )
 {
-    float zNear = 0.1f;
-    float zFar = 100.0f;
+    float zNear = 1.0f;
+    float zFar = 50.0f;
     float z_from_depth_texture = texture(depthMap, coord).x;
     float z_sb = 2.0 * z_from_depth_texture - 1.0; // scale and bias from texture to normalized coords
     float z_world = 2.0 * zNear * zFar / (zFar + zNear - z_sb * (zFar - zNear)); // Get back to real Z

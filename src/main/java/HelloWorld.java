@@ -95,7 +95,7 @@ public class HelloWorld {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
         // Enable v-sync
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
         // Make the window visible
         glfwShowWindow(window);
     }
@@ -113,7 +113,7 @@ public class HelloWorld {
         //glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
-        Camera mainCamera = new Camera(30, 1, 0.1f, 100f);
+        Camera mainCamera = new Camera(30, 1, 0.5f, 60f);
         AbstractScene scene = new MainScene(mainCamera, width, height);
 
         /*******/

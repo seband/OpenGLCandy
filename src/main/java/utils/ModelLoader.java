@@ -31,7 +31,9 @@ public class ModelLoader {
                             Assimp.aiProcess_CalcTangentSpace
             );
         List<Model> models = new ArrayList<>();
+        System.out.printf("Found %d meshes\n",scene.mNumMeshes());
         for(int i=0; i< scene.mNumMeshes(); i++){
+            System.out.printf("Processing %d/%d\n",i+1, scene.mNumMeshes());
 
             AIMesh mesh = AIMesh.create(scene.mMeshes().get(i));
             //Setup arrays
