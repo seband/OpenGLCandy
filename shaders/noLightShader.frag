@@ -11,7 +11,6 @@ void main(void) {
 
     vec3 tex;
     if(isLit == 1){
-        //tex = texture(texUnit, out_TexCoord).rgb;
         tex = vec3(1,1,1);
     }else{
         tex = vec3(0,0,0);

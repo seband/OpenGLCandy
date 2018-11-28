@@ -57,7 +57,7 @@ public class HelloWorld {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(width, height, "OpenGL Candy", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -95,8 +95,7 @@ public class HelloWorld {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
         // Enable v-sync
-        glfwSwapInterval(1);
-
+        glfwSwapInterval(0);
         // Make the window visible
         glfwShowWindow(window);
     }
@@ -131,6 +130,7 @@ public class HelloWorld {
             InputHandler.setMousePos((float)x.get(), (float)y.get());
 
             scene.draw(getDelta());
+            updateFPS();
             glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
             // invoked during this call.
@@ -139,8 +139,13 @@ public class HelloWorld {
         }
 
     }
-    float t = System.nanoTime();
 
+    /**
+     * TIMING TOOLS BASED ON LWJGL3 WIKI
+     */
+    float t = System.nanoTime();
+    long lastFPS = getTime();
+    float fps = 0;
     public long getTime() {
         return System.nanoTime() / 1000000;
     }
@@ -149,8 +154,16 @@ public class HelloWorld {
         long time = getTime();
         int delta = (int) (time - t);
         t = time;
-
         return delta;
+    }
+
+    public void updateFPS() {
+        if (getTime() - lastFPS > 1000) {
+            glfwSetWindowTitle(window, "FPS: " + fps);
+            fps = 0; //reset the FPS counter
+            lastFPS += 1000; //add one second
+        }
+        fps++;
     }
     public static void main(String[] args) {
         new HelloWorld().run();
