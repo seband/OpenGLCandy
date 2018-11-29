@@ -368,6 +368,9 @@ public class MainScene extends AbstractScene {
             skybox.setTexture(darkSky);
             RenderSettings.setLut(RenderSettings.LUT.DARK);
         }
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F4)){
+            RenderSettings.setLut(RenderSettings.LUT.BW);
+        }
         skybox.update();
     }
     private Matrix4f viewMatrixCache;

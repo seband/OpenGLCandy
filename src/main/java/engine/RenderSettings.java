@@ -26,7 +26,8 @@ public class RenderSettings {
     }
     public enum LUT{
         SUNNY,
-        DARK
+        DARK,
+        BW
     }
     private static Texture activeLUT;
 
@@ -42,6 +43,7 @@ public class RenderSettings {
         try {
             luts.put(LUT.SUNNY, TextureLoader.loadTexture(new File("textures/lut2.png")));
             luts.put(LUT.DARK, TextureLoader.loadTexture(new File("textures/lut3.png")));
+            luts.put(LUT.BW, TextureLoader.loadTexture(new File("textures/lut4.png")));
             activeLUT = luts.get(LUT.SUNNY);
         } catch (TextureLoader.TextureLoadException e) {
             e.printStackTrace();
