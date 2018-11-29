@@ -108,7 +108,7 @@ public class Texture {
      * @param location to upload to
      * @param texUnit to use
      */
-    void setLocation(int program, String location, int texUnit){
+    public void setLocation(int program, String location, int texUnit){
         glActiveTexture(GL_TEXTURE0 + texUnit);
         bindTexure();
         glUniform1i(GL20.glGetUniformLocation(program, location), texUnit);

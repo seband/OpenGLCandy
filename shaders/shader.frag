@@ -10,6 +10,7 @@ in vec4 shadowCoord;
 uniform sampler2D texUnit;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
+uniform sampler2D LUT;
 
 uniform mat4 cameraMatrix;
 uniform vec3 lightPosition;
@@ -36,6 +37,7 @@ float readDepth( in vec2 coord )
     float z_world = 2.0 * zNear * zFar / (zFar + zNear - z_sb * (zFar - zNear)); // Get back to real Z
     return z_world;
 }
+
 
 void main(void) {
     vec2 texelSize = 1.0 / textureSize(depthMap, 0);

@@ -34,6 +34,8 @@ public abstract class Renderer {
         utils.BufferUtils.setUniform(program,"renderSSAO", RenderSettings.getSetting(RenderSettings.RenderSetting.SSAO));
         utils.BufferUtils.setUniform(program,"renderShadows", RenderSettings.getSetting(RenderSettings.RenderSetting.SHADOWS));
         utils.BufferUtils.setUniform(program,"renderGodrays", RenderSettings.getSetting(RenderSettings.RenderSetting.GODRAYS));
+        utils.BufferUtils.setUniform(program,"renderLut", RenderSettings.getSetting(RenderSettings.RenderSetting.LUT));
         utils.BufferUtils.setUniform(program, "lightPosition", Sun.sun.gc.transform.position);
+        RenderSettings.getActiveLUT().setLocation(program, "LUT", 4);
     }
 }

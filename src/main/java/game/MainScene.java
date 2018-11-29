@@ -357,10 +357,17 @@ public class MainScene extends AbstractScene {
             RenderSettings.setSetting(RenderSettings.RenderSetting.SHADOWS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
         if(InputHandler.keyDown(GLFW.GLFW_KEY_4))
             RenderSettings.setSetting(RenderSettings.RenderSetting.GODRAYS, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
-        if(InputHandler.keyDown(GLFW.GLFW_KEY_F1))
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F1)){
+            RenderSettings.setSetting(RenderSettings.RenderSetting.LUT, !InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT));
+        }
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F2)){
             skybox.setTexture(brightSky);
-        if(InputHandler.keyDown(GLFW.GLFW_KEY_F2))
+            RenderSettings.setLut(RenderSettings.LUT.SUNNY);
+        }
+        if(InputHandler.keyDown(GLFW.GLFW_KEY_F3)){
             skybox.setTexture(darkSky);
+            RenderSettings.setLut(RenderSettings.LUT.DARK);
+        }
         skybox.update();
     }
     private Matrix4f viewMatrixCache;
