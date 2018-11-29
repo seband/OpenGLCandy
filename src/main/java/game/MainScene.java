@@ -68,7 +68,12 @@ public class MainScene extends AbstractScene {
      */
     protected void initScene() {
         try {
-            loadHagridScene();
+            if(InputHandler.keyDown(GLFW.GLFW_KEY_LEFT_SHIFT)){
+                loadHagridScene();
+            }
+            else {
+                loadCartoonScene();
+            }
 
         } catch (TextureLoader.TextureLoadException e) {
             e.printStackTrace();
@@ -110,6 +115,8 @@ public class MainScene extends AbstractScene {
      * @throws TextureLoader.TextureLoadException
      */
     private void loadCartoonScene() throws TextureLoader.TextureLoadException {
+
+        RenderSettings.setSetting(RenderSettings.RenderSetting.DISPLACEMENT, false);
         System.out.println("Loading Textures...");
         Texture tree1 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_01.png"));
         Texture tree2 = TextureLoader.loadTexture(new File("textures/modelTextures/Tree_02.png"));
@@ -228,6 +235,7 @@ public class MainScene extends AbstractScene {
         textures.put("BigWindows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/BigWindows.jpg")));
         textures.put("BiNgo.png", TextureLoader.loadTexture(new File("textures/hagrid/BiNgo.png")));
         textures.put("CaiAm.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiAm.jpg")));
+        textures.put("SB046.JPG", TextureLoader.loadTexture(new File("textures/hagrid/SB046.JPG")));
         textures.put("CaiChoc.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiChoc.jpg")));
         textures.put("CaiQue.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiQue.jpg")));
         textures.put("CaiVac.jpg", TextureLoader.loadTexture(new File("textures/hagrid/CaiVac.jpg")));
@@ -263,6 +271,8 @@ public class MainScene extends AbstractScene {
         textures.put("Vali.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Vali.jpg")));
         textures.put("XeKutKit.png", TextureLoader.loadTexture(new File("textures/hagrid/XeKutKit.png")));
         textures.put("Xeng.png", TextureLoader.loadTexture(new File("textures/hagrid/Xeng.png")));
+        System.out.println("Loading normal maps");
+        normalmaps.put("SB046.JPG", TextureLoader.loadTexture(new File("textures/hagrid/SB046_normal.JPG")));
         normalmaps.put("Alumox.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Alumox_normal.jpg")));
         normalmaps.put("ban.png", TextureLoader.loadTexture(new File("textures/hagrid/ban_normal.png")));
         normalmaps.put("Bellows.jpg", TextureLoader.loadTexture(new File("textures/hagrid/Bellows_normal.jpg")));
@@ -323,11 +333,13 @@ public class MainScene extends AbstractScene {
                 model.setTexture(textures.get(sb.toString()));
                 model.setNormalMap(normalmaps.get(sb.toString()));
 
+
+
                 model.setLit(false);
                 GameObject gc = new StaticGameObject(model);
                 gc.transform.scale = new Vector3f(0.04f,0.04f,0.04f);
-
-                addGameObject(gc);
+                if(model.getTexture() != null)
+                    addGameObject(gc);
 
             } catch (Exception e) {
                 e.printStackTrace();

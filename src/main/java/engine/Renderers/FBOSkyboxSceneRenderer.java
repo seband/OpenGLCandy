@@ -17,9 +17,10 @@ public class FBOSkyboxSceneRenderer extends FBOSceneRenderer{
 
 
     public void drawWithSkyBox(GameObject skyBox, List<GameObject> gc, Camera camera){
+        init(camera);
         beforeDraw();
         renderSkybox(skyBox, camera);
-        gc.forEach(o ->{render(o, camera);});
+        gc.forEach(o -> render(o, camera));
     }
 
     private void renderSkybox(GameObject gc, Camera camera){

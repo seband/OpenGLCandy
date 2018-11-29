@@ -143,7 +143,7 @@ public class Model {
      * @param transform position and rotation of parent game object
      */
     public void draw(int program, Camera camera, Transform transform) {
-        GL20.glUseProgram(program);
+
         GL30.glBindVertexArray(VAO);
 
         GL20.glEnableVertexAttribArray(0);
@@ -151,16 +151,8 @@ public class Model {
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, VBO_INDEX);
         Matrix4f modelView = new Matrix4f().translate(transform.position).mul(new Matrix4f().scale(transform.scale).mul(transform.rot));
         utils.BufferUtils.setUniform(program,"modelView", modelView);
-        utils.BufferUtils.setUniform(program,"shadowMatrix", Sun.sun.shadowMatrix);
-        utils.BufferUtils.setUniform(program,"cameraMatrix", camera.getViewMatrix());
-        utils.BufferUtils.setUniform(program,"projection", camera.getProjectionMatrix());
-        utils.BufferUtils.setUniform(program,"renderLight", RenderSettings.getSetting(RenderSettings.RenderSetting.LIGHT));
-        utils.BufferUtils.setUniform(program,"renderShadows", RenderSettings.getSetting(RenderSettings.RenderSetting.SHADOWS));
-        utils.BufferUtils.setUniform(program,"renderSSAO", RenderSettings.getSetting(RenderSettings.RenderSetting.SSAO));
-        utils.BufferUtils.setUniform(program,"renderShadows", RenderSettings.getSetting(RenderSettings.RenderSetting.SHADOWS));
-        utils.BufferUtils.setUniform(program,"renderGodrays", RenderSettings.getSetting(RenderSettings.RenderSetting.GODRAYS));
         utils.BufferUtils.setUniform(program, "isLit", material.lit);
-        utils.BufferUtils.setUniform(program, "lightPosition", Sun.sun.gc.transform.position);
+
         if(textureCoords.length>0 && texture != null){
             texture.setLocation(program, "texUnit", 0);
         }
@@ -181,7 +173,7 @@ public class Model {
         GL20.glDisableVertexAttribArray(0);
         GL30.glBindVertexArray(0);
 
-        GL20.glUseProgram(0);
+
     }
 
     /**

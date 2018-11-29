@@ -29,7 +29,7 @@ float rand(vec2 co){
 }
 float readDepth( in vec2 coord )
 {
-    float zNear = 20.0f;
+    float zNear = 10.0f;
     float zFar = 80.0f;
     float z_from_depth_texture = texture(depthMap, coord).x;
     float z_sb = 2.0 * z_from_depth_texture - 1.0; // scale and bias from texture to normalized coords

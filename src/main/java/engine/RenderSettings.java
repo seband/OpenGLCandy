@@ -15,7 +15,8 @@ public class RenderSettings {
         LIGHT,
         SSAO,
         SHADOWS,
-        GODRAYS
+        GODRAYS,
+        DISPLACEMENT
     }
 
     private static Map<RenderSetting, Boolean> settings = new EnumMap<>(RenderSetting.class);
@@ -24,6 +25,7 @@ public class RenderSettings {
         settings.put(RenderSetting.SSAO, true);
         settings.put(RenderSetting.SHADOWS, true);
         settings.put(RenderSetting.GODRAYS, true);
+        settings.put(RenderSetting.DISPLACEMENT, true);
     }
 
     /**
