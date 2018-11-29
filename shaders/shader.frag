@@ -30,8 +30,8 @@ float rand(vec2 co){
 }
 float readDepth( in vec2 coord )
 {
-    float zNear = 10.0f;
-    float zFar = 80.0f;
+    float zNear = 5.0f;
+    float zFar = 100.0f;
     float z_from_depth_texture = texture(depthMap, coord).x;
     float z_sb = 2.0 * z_from_depth_texture - 1.0; // scale and bias from texture to normalized coords
     float z_world = 2.0 * zNear * zFar / (zFar + zNear - z_sb * (zFar - zNear)); // Get back to real Z
@@ -73,7 +73,7 @@ void main(void) {
     float shade = 1.0;
     float bias = 0.0008f;
      //Simple sampling
-      /*  for (int i=0;i<4;i++){
+  /*      for (int i=0;i<4;i++){
           if ( texture( depthMap, adjustedShadowCoords.xy + poissonDisk[i]/700.0 ).z + 0.0005f <  adjustedShadowCoords.z ){
             shade-=0.2;
           }

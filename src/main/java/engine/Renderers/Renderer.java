@@ -23,7 +23,9 @@ public abstract class Renderer {
     }
     protected abstract void render(GameObject gc, Camera camera);
     protected abstract void beforeDraw();
-    protected void afterDraw(){}
+    protected void afterDraw(){
+        GL20.glUseProgram(0);
+    }
     protected void init(Camera camera){
         GL20.glUseProgram(program);
         utils.BufferUtils.setUniform(program,"shadowMatrix", Sun.sun.shadowMatrix);

@@ -12,7 +12,7 @@ vec3 calcLUT(in sampler2D lut, in vec3 color){
     vec2 lutSize = vec2(0.00390625f, 0.0625f);
     vec4 lutCoordinates = vec4(0);
     color.b *= 15.0f;
-    lutCoordinates.w = floor(color.b);
+    lutCoordinates.w =  min(floor(color.b), 15.0f);
     lutCoordinates.xy = color.rg * 15.0f * lutSize + 0.5f * lutSize;
     lutCoordinates.x += lutCoordinates.w * lutSize.y;
     color.rgb = texture(lut, lutCoordinates.xy).rgb;

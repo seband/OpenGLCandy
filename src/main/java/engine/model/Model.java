@@ -165,7 +165,6 @@ public class Model {
         if(fxMap != null){
             fxMap.setLocation(program, "fxMap", 3);
         }
-
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, indicies.length, GL11.GL_UNSIGNED_INT, 0);
 
