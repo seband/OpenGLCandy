@@ -1,6 +1,18 @@
 project.ext.lwjglVersion = "3.2.0"
 project.ext.jomlVersion = "1.9.11"
-project.ext.lwjglNatives = "natives-linux"
+import org.gradle.internal.os.OperatingSystem
+
+switch ( OperatingSystem.current() ) {
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos"
+		break
+}
 apply plugin: 'java'
 
 repositories {
