@@ -53,7 +53,7 @@ public class MainScene extends AbstractScene {
         godRayRenderer = new FBOGodRayRenderer(radialBlurProgram, width, height);
         depthTextureRenderer = new FBODepthRenderer(depthTextureProgram, 2048, 2048);
         SSAORenderer = new FBOSSAORenderer(SSAOProgram, width, height);
-        textureRenderer = new TextureRenderer(textureProgram);
+        textureRenderer = new TextureRenderer(textureProgram, width, height);
 
         square  = new StaticGameObject(new SquareModel(textureProgram));
         square.transform.position = new Vector3f(0,0,-2);

@@ -9,9 +9,11 @@ import org.lwjgl.opengl.GL20;
 import java.util.List;
 
 public abstract class Renderer {
-    protected int program;
+    protected int program, width, height;
 
-    public Renderer(int program){
+    public Renderer(int program, int width, int height){
+        this.width = width;
+        this.height = height;
         this.program = program;
     }
 

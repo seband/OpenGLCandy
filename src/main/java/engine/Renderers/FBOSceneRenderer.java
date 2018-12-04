@@ -20,6 +20,7 @@ public class FBOSceneRenderer extends FBORenderer{
 
     @Override
     protected void beforeDraw(){
+        glViewport(0, 0, width, height);
         BufferUtils.bindFBO(FBO);
         glClearColor(0.5f, 0.5f, 1.0f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

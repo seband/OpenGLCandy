@@ -24,8 +24,8 @@ public class HelloWorld {
 
     // The window handle
     private long window;
-    private int width = 800;
-    private int height= 800;
+    private int width = 1280;
+    private int height= 960;
 
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -113,7 +113,7 @@ public class HelloWorld {
         //glEnable(GL_DEPTH_TEST);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
         /*******/
-        Camera mainCamera = new Camera(30, 1, 0.5f, 60f);
+        Camera mainCamera = new Camera(30, 1.25f, 0.5f, 60f);
         AbstractScene scene = new MainScene(mainCamera, width, height);
 
         /*******/

@@ -16,6 +16,7 @@ public class FBOSSAORenderer extends FBORenderer{
 
     @Override
     protected void beforeDraw() {
+        glViewport(0, 0, width, height);
         BufferUtils.bindFBO(FBO);
         glClearColor(0.0f, 0.0f, 0.0f, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

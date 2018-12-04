@@ -17,10 +17,12 @@ public class FBONoLightRenderer extends FBOSceneRenderer{
 
     @Override
     protected void beforeDraw(){
+        glViewport(0, 0, width, height);
         BufferUtils.bindFBO(FBO);
         glClearColor(0.0f, 0.0f, 0.0f, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+
     }
 
 }
